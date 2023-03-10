@@ -1,5 +1,5 @@
-defmodule Zoo.Binance.Model.Order do
-  use Zoo.Model
+defmodule ExchangeZoo.Binance.Model.Order do
+  use ExchangeZoo.Model
 
   @primary_key false
 

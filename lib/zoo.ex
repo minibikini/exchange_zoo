@@ -1,6 +1,6 @@
-defmodule Zoo do
+defmodule ExchangeZoo do
   @moduledoc """
-  Documentation for `Zoo`.
+  Documentation for `ExchangeZoo`.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule Zoo do
 
   ## Examples
 
-      iex> Zoo.hello()
+      iex> ExchangeZoo.hello()
       :world
 
   """

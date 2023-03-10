@@ -1,8 +1,8 @@
-defmodule ZooTest do
+defmodule ExchangeZooTest do
   use ExUnit.Case
-  doctest Zoo
+  doctest ExchangeZoo
 
   test "greets the world" do
-    assert Zoo.hello() == :world
+    assert ExchangeZoo.hello() == :world
   end
 end

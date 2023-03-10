@@ -1,11 +1,11 @@
-defmodule Zoo.API.Binance.FAPI do
+defmodule ExchangeZoo.API.Binance.FAPI do
   @base_url "https://fapi.binance.com"
 
   def get_account_info() do
     Finch.build(:get, @base_url <> "/fapi/v2/account")
     |> put_api_key()
     |> put_signature()
-    |> Finch.request(Zoo.Finch)
+    |> Finch.request(ExchangeZoo.Finch)
   end
 
   def put_api_key(%Finch.Request{} = request, api_key \\ get_api_key()) do

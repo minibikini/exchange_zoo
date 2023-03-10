@@ -1,4 +1,4 @@
-defmodule Zoo.Fixtures do
+defmodule ExchangeZoo.Fixtures do
   def json_fixture(name) do
     "test/support/fixtures/#{name}.json"
     |> File.read!()

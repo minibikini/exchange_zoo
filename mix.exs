@@ -1,9 +1,9 @@
-defmodule Zoo.MixProject do
+defmodule ExchangeZoo.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :zoo,
+      app: :exchange_zoo,
       version: "0.1.0",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -16,7 +16,7 @@ defmodule Zoo.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Zoo.Application, []}
+      mod: {ExchangeZoo.Application, []}
     ]
   end
 

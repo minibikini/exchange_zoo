@@ -1,9 +1,9 @@
-defmodule Zoo.Model do
+defmodule ExchangeZoo.Model do
   defmacro __using__(_opts) do
     quote location: :keep do
       use Ecto.Schema
       import Ecto.Changeset
-      import Zoo.Util
+      import ExchangeZoo.Util
 
       def from!(data) do
         data = underscore_keys(data)

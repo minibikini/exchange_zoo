@@ -1,9 +1,9 @@
-defmodule Zoo.BinanceTest do
+defmodule ExchangeZoo.BinanceTest do
   use ExUnit.Case, async: true
-  import Zoo.Fixtures
+  import ExchangeZoo.Fixtures
 
   describe "FAPI" do
-    alias Zoo.API.Binance.FAPI
+    alias ExchangeZoo.API.Binance.FAPI
 
     @doc """
     Source: https://binance-docs.github.io/apidocs/futures/en/#signed-trade-and-user_data-endpoint-security
@@ -21,7 +21,7 @@ defmodule Zoo.BinanceTest do
   end
 
   describe "account_info" do
-    alias Zoo.Binance.Model.AccountInfo
+    alias ExchangeZoo.Binance.Model.AccountInfo
 
     test "should parse /fapi/v2/account" do
       record =
@@ -33,7 +33,7 @@ defmodule Zoo.BinanceTest do
   end
 
   describe "order" do
-    alias Zoo.Binance.Model.Order
+    alias ExchangeZoo.Binance.Model.Order
 
     test "should parse /fapi/v1/openOrders" do
       [record] =

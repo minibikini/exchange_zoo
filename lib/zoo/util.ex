@@ -1,4 +1,4 @@
-defmodule Zoo.Util do
+defmodule ExchangeZoo.Util do
   def underscore_keys(data) when is_map(data) do
     data
     |> Enum.map(fn {k, v} ->
