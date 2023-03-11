@@ -1,6 +1,6 @@
-defmodule ExchangeZoo.Binance.Model.AccountInfo do
+defmodule ExchangeZoo.Binance.Model.Account do
   use ExchangeZoo.Model
-  alias ExchangeZoo.Binance.Model.AccountInfo.{Asset, Position}
+  alias ExchangeZoo.Binance.Model.Account.{Asset, Position}
 
   @primary_key false
 
@@ -34,7 +34,7 @@ defmodule ExchangeZoo.Binance.Model.AccountInfo do
   end
 end
 
-defmodule ExchangeZoo.Binance.Model.AccountInfo.Asset do
+defmodule ExchangeZoo.Binance.Model.Account.Asset do
   use ExchangeZoo.Model
 
   @primary_key false
@@ -61,7 +61,7 @@ defmodule ExchangeZoo.Binance.Model.AccountInfo.Asset do
   end
 end
 
-defmodule ExchangeZoo.Binance.Model.AccountInfo.Position do
+defmodule ExchangeZoo.Binance.Model.Account.Position do
   use ExchangeZoo.Model
 
   @primary_key false

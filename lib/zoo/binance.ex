@@ -1,32 +1,70 @@
 defmodule ExchangeZoo.API.Binance.FAPI do
-  @base_url "https://fapi.binance.com"
+  alias ExchangeZoo.Request
+  alias ExchangeZoo.Binance.Model.{Account, Order}
 
-  def get_account_info() do
-    Finch.build(:get, @base_url <> "/fapi/v2/account")
-    |> put_api_key()
-    |> put_signature()
-    |> Finch.request(ExchangeZoo.Finch)
+  @base_url "https://testnet.binancefuture.com/fapi"
+  # @base_url "https://fapi.binance.com"
+
+  def get_account(opts \\ []) do
+    build_url!("/v2/account")
+    |> append_query_params(opts)
+    |> perform_private(:get, Account)
   end
 
-  def put_api_key(%Finch.Request{} = request, api_key \\ get_api_key()) do
-    %{request | headers: [{"X-MBX-APIKEY", api_key} | request.headers]}
+  def get_open_orders(opts \\ []) do
+    build_url!("/v1/openOrders")
+    |> append_query_params(opts)
+    |> perform_private(:get, Order)
   end
 
-  def put_signature(%Finch.Request{} = request, secret_key \\ get_secret_key()) do
-    payload = "#{request.query}#{request.body}"
+  def create_order(opts \\ []) do
+    build_url!("/v1/order")
+    |> append_query_params(opts)
+    |> perform_private(:post, Order)
+  end
 
-    signature =
-      :crypto.mac(:hmac, :sha256, secret_key, payload)
-      |> Base.encode16(case: :lower)
+  def cancel_order(opts \\ []) do
+    build_url!("/v1/order")
+    |> append_query_params(opts)
+    |> perform_private(:delete, Order)
+  end
 
-    %{request | query: request.query <> "&signature=#{signature}"}
+  def cancel_all_open_orders(opts \\ []) do
+    build_url!("/v1/allOpenOrders")
+    |> append_query_params(opts)
+    |> perform_private(:delete)
+  end
+
+  def cancel_multiple_orders(opts \\ []) do
+    build_url!("/v1/batchOrders")
+    |> append_query_params(opts)
+    |> perform_private(:delete, Order)
+  end
+
+  defp build_url!(path), do: URI.new!(@base_url <> path)
+
+  defp perform_private(url, method, mod \\ nil, opts \\ []) do
+    api_key = Keyword.get(opts, :api_key, get_api_key())
+    secret_key = Keyword.get(opts, :secret_key, get_secret_key())
+
+    Finch.build(method, url)
+    |> Request.add_header("X-MBX-APIKEY", api_key)
+    |> Request.put_signature(secret_key)
+    |> Request.perform(mod)
   end
 
   defp get_api_key() do
-    "your-api-key"
+    System.get_env("BINANCE_FUTURES_API_KEY")
   end
 
   defp get_secret_key() do
-    "your-secret-key"
+    System.get_env("BINANCE_FUTURES_API_SECRET")
+  end
+
+  defp append_query_params(%URI{} = uri, opts) do
+    now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
+    opts = Keyword.put_new(opts, :timestamp, now)
+
+    URI.append_query(uri, URI.encode_query(opts))
   end
 end
