@@ -41,6 +41,24 @@ defmodule ExchangeZoo.API.Binance.FAPI do
     |> perform_private(:delete, Order)
   end
 
+  def start_user_data_stream(opts \\ []) do
+    build_url!("/v1/listenKey")
+    |> append_query_params(opts)
+    |> perform_private(:post)
+  end
+
+  def keepalive_user_data_stream(opts \\ []) do
+    build_url!("/v1/listenKey")
+    |> append_query_params(opts)
+    |> perform_private(:put)
+  end
+
+  def close_user_data_stream(opts \\ []) do
+    build_url!("/v1/listenKey")
+    |> append_query_params(opts)
+    |> perform_private(:delete)
+  end
+
   defp build_url!(path), do: URI.new!(@base_url <> path)
 
   defp perform_private(url, method, mod \\ nil, opts \\ []) do
