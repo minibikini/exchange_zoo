@@ -1,6 +1,6 @@
 defmodule ExchangeZoo.API.Binance.FAPI do
   alias ExchangeZoo.Request
-  alias ExchangeZoo.Binance.Model.{Account, Order}
+  alias ExchangeZoo.Binance.Model.{Account, Order, ListenKey}
 
   @base_url "https://testnet.binancefuture.com/fapi"
   # @base_url "https://fapi.binance.com"
@@ -44,7 +44,7 @@ defmodule ExchangeZoo.API.Binance.FAPI do
   def start_user_data_stream(opts \\ []) do
     build_url!("/v1/listenKey")
     |> append_query_params(opts)
-    |> perform_private(:post)
+    |> perform_private(:post, ListenKey)
   end
 
   def keepalive_user_data_stream(opts \\ []) do
