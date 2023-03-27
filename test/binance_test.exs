@@ -1,28 +1,486 @@
 defmodule ExchangeZoo.BinanceTest do
   use ExUnit.Case, async: true
   import ExchangeZoo.Fixtures
+  alias ExchangeZoo.Binance.FWS
 
-  describe "account_info" do
-    alias ExchangeZoo.Binance.Model.Account
+  describe "ExchangeInfo" do
+    alias ExchangeZoo.Binance.Model.ExchangeInfo
+    alias ExchangeZoo.Binance.Model.ExchangeInfo.{Asset, Symbol, RateLimit}
 
-    test "should parse /fapi/v2/account" do
-      record =
-        json_fixture("binance/fapi_v2_account")
-        |> Account.from!()
+    test "should parse /fapi/v1/exchangeInfo" do
+      expected = %ExchangeInfo{
+        assets: [
+          %Asset{id: nil, asset: "BUSD", margin_available: true, auto_asset_exchange: Decimal.new(0)},
+          %Asset{id: nil, asset: "USDT", margin_available: true, auto_asset_exchange: Decimal.new(0)},
+          %Asset{id: nil, asset: "BNB", margin_available: false, auto_asset_exchange: nil}
+        ],
+        exchange_filters: [],
+        rate_limits: [
+          %RateLimit{
+            id: nil,
+            interval: :minute,
+            interval_num: 1,
+            limit: 2400,
+            rate_limit_type: :request_weight
+          },
+          %RateLimit{
+            id: nil,
+            interval: :minute,
+            interval_num: 1,
+            limit: 1200,
+            rate_limit_type: :orders
+          }
+        ],
+        symbols: [
+          %Symbol{
+            id: nil,
+            symbol: "BLZUSDT",
+            pair: "BLZUSDT",
+            contract_type: :perpetual,
+            delivery_date: 4_133_404_800_000,
+            onboard_date: 1_598_252_400_000,
+            status: :trading,
+            maint_margin_percent: Decimal.new("2.5000"),
+            required_margin_percent: Decimal.new("5.0000"),
+            base_asset: "BLZ",
+            quote_asset: "USDT",
+            margin_asset: "USDT",
+            price_precision: 5,
+            quantity_precision: 0,
+            base_asset_precision: 8,
+            quote_precision: 8,
+            underlying_type: "COIN",
+            underlying_sub_type: ["STORAGE"],
+            settle_plan: 0,
+            trigger_protect: Decimal.new("0.15"),
+            order_type: [:limit, :market, :stop, :stop_market, :take_profit, :take_profit_market, :trailing_stop_market],
+            time_in_force: [:gtc, :ioc, :fok, :gtx],
+            liquidation_fee: Decimal.new("0.010000"),
+            market_take_bound: Decimal.new("0.30"),
+            filters: [
+              %{
+                "filter_type" => "PRICE_FILTER",
+                "max_price" => "300",
+                "min_price" => "0.0001",
+                "tick_size" => "0.0001"
+              },
+              %{
+                "filter_type" => "LOT_SIZE",
+                "max_qty" => "10000000",
+                "min_qty" => "1",
+                "step_size" => "1"
+              },
+              %{
+                "filter_type" => "MARKET_LOT_SIZE",
+                "max_qty" => "590119",
+                "min_qty" => "1",
+                "step_size" => "1"
+              },
+              %{"filter_type" => "MAX_NUM_ORDERS", "limit" => 200},
+              %{"filter_type" => "MAX_NUM_ALGO_ORDERS", "limit" => 100},
+              %{"filter_type" => "MIN_NOTIONAL", "notional" => "1"},
+              %{
+                "filter_type" => "PERCENT_PRICE",
+                "multiplier_decimal" => 4,
+                "multiplier_down" => "0.8500",
+                "multiplier_up" => "1.1500"
+              }
+            ]
+          }
+        ],
+        timezone: "UTC"
+      }
 
-      assert record.available_balance == Decimal.new("126.72469206")
+      assert expected ==
+               json_fixture("binance/fapi_v1_exchange_info")
+               |> ExchangeInfo.from!()
     end
   end
 
-  describe "order" do
+  describe "LeverageBracket" do
+    alias ExchangeZoo.Binance.Model.LeverageBracket
+    alias ExchangeZoo.Binance.Model.LeverageBracket.Bracket
+
+    test "should parse /fapi/v1/leverageBracket" do
+      expected = %LeverageBracket{
+        symbol: "ETHUSDT",
+        brackets: [
+          %Bracket{
+            id: nil,
+            bracket: 1,
+            initial_leverage: Decimal.new("75"),
+            notional_cap: Decimal.new("10000"),
+            notional_floor: Decimal.new("0"),
+            maint_margin_ratio: Decimal.new("0.0065"),
+            cum: Decimal.new("0")
+          }
+        ]
+      }
+
+      assert expected ==
+               json_fixture("binance/fapi_v1_leverage_bracket")
+               |> LeverageBracket.from!()
+    end
+  end
+
+  describe "AccountInfo" do
+    alias ExchangeZoo.Binance.Model.Account
+
+    test "should parse /fapi/v2/account" do
+      expected = %Account{
+        fee_tier: 0,
+        can_trader: nil,
+        can_deposit: true,
+        can_withdraw: true,
+        update_time: 0,
+        multi_assets_margin: true,
+        total_initial_margin: Decimal.new("0E-8"),
+        total_maint_margin: Decimal.new("0E-8"),
+        total_wallet_balance: Decimal.new("126.72469206"),
+        total_unrealized_profit: Decimal.new("0E-8"),
+        total_margin_balance: Decimal.new("126.72469206"),
+        total_position_initial_margin: Decimal.new("0E-8"),
+        total_open_order_initial_margin: Decimal.new("0E-8"),
+        total_cross_wallet_balance: Decimal.new("126.72469206"),
+        total_cross_un_pnl: Decimal.new("0E-8"),
+        available_balance: Decimal.new("126.72469206"),
+        assets: [
+          %Account.Asset{
+            asset: "USDT",
+            wallet_balance: Decimal.new("23.72469206"),
+            unrealized_profit: Decimal.new("0E-8"),
+            margin_balance: Decimal.new("23.72469206"),
+            maint_margin: Decimal.new("0E-8"),
+            initial_margin: Decimal.new("0E-8"),
+            position_initial_margin: Decimal.new("0E-8"),
+            open_order_initial_margin: Decimal.new("0E-8"),
+            cross_wallet_balance: Decimal.new("23.72469206"),
+            cross_un_pnl: Decimal.new("0E-8"),
+            available_balance: Decimal.new("23.72469206"),
+            max_withdraw_amount: Decimal.new("23.72469206"),
+            margin_available: true,
+            update_time: Decimal.new(1_625_474_304_765)
+          },
+          %Account.Asset{
+            asset: "BUSD",
+            wallet_balance: Decimal.new("103.12345678"),
+            unrealized_profit: Decimal.new("0E-8"),
+            margin_balance: Decimal.new("103.12345678"),
+            maint_margin: Decimal.new("0E-8"),
+            initial_margin: Decimal.new("0E-8"),
+            position_initial_margin: Decimal.new("0E-8"),
+            open_order_initial_margin: Decimal.new("0E-8"),
+            cross_wallet_balance: Decimal.new("103.12345678"),
+            cross_un_pnl: Decimal.new("0E-8"),
+            available_balance: Decimal.new("103.12345678"),
+            max_withdraw_amount: Decimal.new("103.12345678"),
+            margin_available: true,
+            update_time: Decimal.new(1_625_474_304_765)
+          }
+        ],
+        positions: [
+          %Account.Position{
+            symbol: "BTCUSDT",
+            initial_margin: Decimal.new(0),
+            maint_margin: Decimal.new(0),
+            unrealized_profit: Decimal.new("0E-8"),
+            position_initial_margin: Decimal.new(0),
+            open_order_initial_margin: Decimal.new(0),
+            leverage: Decimal.new(100),
+            isolated: true,
+            entry_price: Decimal.new("0.00000"),
+            max_notional: Decimal.new(250_000),
+            bid_notional: Decimal.new(0),
+            ask_notional: Decimal.new(0),
+            position_side: :both,
+            position_amt: Decimal.new(0),
+            update_time: 0
+          }
+        ]
+      }
+
+      assert expected ==
+               json_fixture("binance/fapi_v2_account")
+               |> Account.from!()
+    end
+  end
+
+  describe "Order" do
     alias ExchangeZoo.Binance.Model.Order
 
     test "should parse /fapi/v1/openOrders" do
-      [record] =
-        json_fixture("binance/fapi_v1_openOrders")
-        |> Enum.map(&Order.from!/1)
+      expected = [
+        %ExchangeZoo.Binance.Model.Order{
+          activate_price: Decimal.new(9020),
+          avg_price: Decimal.new("0.00000"),
+          client_order_id: "abc",
+          close_position: false,
+          cum_quote: Decimal.new(0),
+          executed_qty: Decimal.new(0),
+          order_id: 1_917_641,
+          orig_qty: Decimal.new("0.40"),
+          orig_type: :trailing_stop_market,
+          position_side: :short,
+          price: Decimal.new(0),
+          price_protect: false,
+          price_rate: Decimal.new("0.3"),
+          reduce_only: false,
+          side: :buy,
+          status: :new,
+          stop_price: Decimal.new(9300),
+          symbol: "BTCUSDT",
+          time: 1_579_276_756_075,
+          time_in_force: :gtc,
+          type: :trailing_stop_market,
+          update_time: 1_579_276_756_075,
+          working_type: :contract_price
+        }
+      ]
 
-      assert record.order_id == 1917641
+      assert expected ==
+               json_fixture("binance/fapi_v1_openOrders")
+               |> Enum.map(&Order.from!/1)
+    end
+  end
+
+  describe "MarkPriceUpdateEvent" do
+    alias ExchangeZoo.Binance.Model.MarkPriceUpdateEvent
+
+    test "should parse markPriceUpdate event" do
+      expected = %MarkPriceUpdateEvent{
+        event_time: 1_562_305_380_000,
+        symbol: "BTCUSDT",
+        mark_price: Decimal.new("11794.15000000"),
+        index_price: Decimal.new("11784.62659091"),
+        estimated_settle_price: Decimal.new("11784.25641265"),
+        funding_rate: Decimal.new("0.00038167"),
+        next_funding_time: 1_562_306_400_000
+      }
+
+      assert expected ==
+               json_fixture("binance/events/mark_price_update")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "ListenKeyExpiredEvent" do
+    alias ExchangeZoo.Binance.Model.ListenKeyExpiredEvent
+
+    test "should parse listenKeyExpired event" do
+      expected = %ListenKeyExpiredEvent{event_time: 1_576_653_824_250}
+
+      assert expected ==
+               json_fixture("binance/events/listen_key_expired")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "MarginCallEvent" do
+    alias ExchangeZoo.Binance.Model.MarginCallEvent
+
+    test "should parse MARGIN_CALL event" do
+      expected = %MarginCallEvent{
+        event_time: 1_587_727_187_525,
+        cross_wallet_balance: Decimal.new("3.16812045"),
+        positions: [
+          %MarginCallEvent.Position{
+            symbol: "ETHUSDT",
+            side: :long,
+            amount: Decimal.new("1.327"),
+            margin_type: :crossed,
+            isolated_wallet: Decimal.new(0),
+            mark_price: Decimal.new("187.17127"),
+            unrealized_pnl: Decimal.new("-1.166074"),
+            maint_margin_req: Decimal.new("1.614445")
+          }
+        ]
+      }
+
+      assert expected ==
+               json_fixture("binance/events/margin_call")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "AccountUpdateEvent" do
+    alias ExchangeZoo.Binance.Model.AccountUpdateEvent
+    alias ExchangeZoo.Binance.Model.AccountUpdateEvent.{AccountUpdate, Balance, Position}
+
+    test "should parse ACCOUNT_UPDATE event" do
+      expected = %AccountUpdateEvent{
+        event_time: 1_564_745_798_939,
+        transaction_time: 1_564_745_798_938,
+        account_update: %AccountUpdate{
+          reason_type: :order,
+          balances: [
+            %Balance{
+              asset: "USDT",
+              wallet_balance: Decimal.new("122624.12345678"),
+              cross_wallet_balance: Decimal.new("100.12345678"),
+              balance_change: Decimal.new("50.12345678")
+            },
+            %Balance{
+              asset: "BUSD",
+              wallet_balance: Decimal.new("1.00000000"),
+              cross_wallet_balance: Decimal.new("0E-8"),
+              balance_change: Decimal.new("-49.12345678")
+            }
+          ],
+          positions: [
+            %Position{
+              symbol: "BTCUSDT",
+              side: :both,
+              amount: Decimal.new(0),
+              entry_price: Decimal.new("0.00000"),
+              accumulated_realized: Decimal.new(200),
+              unrealized_pnl: Decimal.new(0),
+              margin_type: :isolated,
+              isolated_wallet: Decimal.new("0E-8")
+            },
+            %Position{
+              symbol: "BTCUSDT",
+              side: :long,
+              amount: Decimal.new(20),
+              entry_price: Decimal.new("6563.66500"),
+              accumulated_realized: Decimal.new(0),
+              unrealized_pnl: Decimal.new("2850.21200"),
+              margin_type: :isolated,
+              isolated_wallet: Decimal.new("13200.70726908")
+            },
+            %Position{
+              symbol: "BTCUSDT",
+              side: :short,
+              amount: Decimal.new(-10),
+              entry_price: Decimal.new("6563.86000"),
+              accumulated_realized: Decimal.new("-45.04000000"),
+              unrealized_pnl: Decimal.new("-1423.15600"),
+              margin_type: :isolated,
+              isolated_wallet: Decimal.new("6570.42511771")
+            }
+          ]
+        }
+      }
+
+      assert expected ==
+               json_fixture("binance/events/account_update_order")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "OrderTradeUpdateEvent" do
+    alias ExchangeZoo.Binance.Model.OrderTradeUpdateEvent
+
+    test "should parse ORDER_TRADE_UPDATE event" do
+      expected = %OrderTradeUpdateEvent{
+        event_time: 1_568_879_465_651,
+        transaction_time: 1_568_879_465_650,
+        order_update: %OrderTradeUpdateEvent.OrderUpdate{
+          symbol: "BTCUSDT",
+          client_order_id: "TEST",
+          side: :sell,
+          order_type: :trailing_stop_market,
+          time_in_force: :gtc,
+          original_quantity: Decimal.new("0.001"),
+          original_price: Decimal.new(0),
+          avg_price: Decimal.new(0),
+          stop_price: Decimal.new("7103.04"),
+          execution_type: :new,
+          order_status: :new,
+          order_id: 8_886_774,
+          order_last_filled_qty: Decimal.new(0),
+          total_filled: Decimal.new(0),
+          last_fill_price: Decimal.new(0),
+          commission_asset: "USDT",
+          commission_amount: Decimal.new(0),
+          order_trade_time: 1_568_879_465_650,
+          trade_id: 0,
+          bid_notional: Decimal.new(0),
+          ask_notional: Decimal.new("9.91"),
+          maker_side: false,
+          reduce_only: false,
+          stop_price_working_type: :contract_price,
+          original_order_type: :trailing_stop_market,
+          position_side: :long,
+          close_all: false,
+          activation_price: Decimal.new("7476.89"),
+          callback_rate: Decimal.new("5.0"),
+          realized_profit: Decimal.new(0)
+        }
+      }
+
+      assert expected ==
+               json_fixture("binance/events/order_trade_update")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "AccountConfigUpdateEvent" do
+    alias ExchangeZoo.Binance.Model.AccountConfigUpdateEvent
+
+    test "should parse ACCOUNT_CONFIG_UPDATE event" do
+      expected = %AccountConfigUpdateEvent{
+        event_time: 1_611_646_737_479,
+        transaction_time: 1_611_646_737_476,
+        trade_pair: %AccountConfigUpdateEvent.TradePair{
+          symbol: "BTCUSDT",
+          leverage: 25
+        },
+        margin_mode: nil
+      }
+
+      assert expected ==
+               json_fixture("binance/events/account_config_update")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "StrategyUpdateEvent" do
+    alias ExchangeZoo.Binance.Model.StrategyUpdateEvent
+
+    test "should parse STRATEGY_UPDATE event" do
+      expected = %StrategyUpdateEvent{
+        event_time: 1_669_261_797_628,
+        transaction_time: 1_669_261_797_627,
+        strategy_update: %StrategyUpdateEvent.StrategyUpdate{
+          strategy_id: 176_054_594,
+          strategy_type: :grid,
+          strategy_status: :new,
+          symbol: "BTCUSDT",
+          update_time: 1_669_261_797_627,
+          opcode: 8007
+        }
+      }
+
+      assert expected ==
+               json_fixture("binance/events/strategy_update")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "GridUpdateEvent" do
+    alias ExchangeZoo.Binance.Model.GridUpdateEvent
+
+    test "should parse GRID_UPDATE event" do
+      expected = %GridUpdateEvent{
+        event_time: 1_669_262_908_218,
+        transaction_time: 1_669_262_908_216,
+        grid_update: %GridUpdateEvent.GridUpdate{
+          strategy_id: 176_057_039,
+          strategy_type: :grid,
+          strategy_status: :working,
+          symbol: "BTCUSDT",
+          realized_pnl: Decimal.new("-0.00300716"),
+          unmatched_avg_price: Decimal.new(16720),
+          unmatched_qty: Decimal.new("-0.001"),
+          unmatched_fee: Decimal.new("-0.00300716"),
+          matched_pnl: Decimal.new("0.0"),
+          update_time: 1_669_262_908_197
+        }
+      }
+
+      assert expected ==
+               json_fixture("binance/events/grid_update")
+               |> FWS.parse_event()
     end
   end
 end

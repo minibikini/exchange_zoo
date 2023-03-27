@@ -37,7 +37,10 @@ defmodule ExchangeZoo.Binance.Model.Order do
   end
 
   def changeset(order, attrs \\ %{}) do
-    attrs = update_values(attrs, ~w(orig_type position_side side status time_in_force type working_type), &String.downcase/1)
+    attrs =
+      attrs
+      |> underscore_keys()
+      |> prepare_enums(~w(orig_type position_side side status time_in_force type working_type))
 
     order
     |> cast(attrs, __MODULE__.__schema__(:fields))

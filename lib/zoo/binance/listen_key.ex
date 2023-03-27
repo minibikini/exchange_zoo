@@ -7,10 +7,8 @@ defmodule ExchangeZoo.Binance.Model.ListenKey do
     field :listen_key, :string
   end
 
-  def changeset(order, attrs \\ %{}) do
-    attrs = update_values(attrs, ~w(listen_key), &String.downcase/1)
-
-    order
-    |> cast(attrs, __MODULE__.__schema__(:fields))
+  def changeset(listen_key, attrs \\ %{}) do
+    attrs = underscore_keys(attrs)
+    cast(listen_key, attrs, __MODULE__.__schema__(:fields))
   end
 end

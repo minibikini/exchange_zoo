@@ -27,6 +27,8 @@ defmodule ExchangeZoo.Binance.Model.Account do
   end
 
   def changeset(account_info, attrs \\ %{}) do
+    attrs = underscore_keys(attrs)
+
     account_info
     |> cast(attrs, __MODULE__.__schema__(:fields) -- [:assets, :positions])
     |> cast_embed(:assets)
@@ -85,7 +87,7 @@ defmodule ExchangeZoo.Binance.Model.Account.Position do
   end
 
   def changeset(position, attrs \\ %{}) do
-    attrs = update_values(attrs, ["position_side"], &String.downcase/1)
+    attrs = prepare_enums(attrs, ~w(position_side))
     cast(position, attrs, __MODULE__.__schema__(:fields))
   end
 end

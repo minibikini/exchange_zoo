@@ -1,11 +1,14 @@
 defmodule ExchangeZoo.Request do
-  def perform(request, mod) do
+  def perform(request, mod, error_mod \\ nil) do
     with {:ok, %Finch.Response{status: 200} = response} <- Finch.request(request, ExchangeZoo.Finch),
          {:ok, data} <- Jason.decode(response.body) do
       {:ok, model_from_data(data, mod)}
     else
       {:ok, %Finch.Response{} = response} ->
-        {:error, model_from_data(response.body, nil)}
+        case Jason.decode(response.body) do
+          {:ok, data} -> model_from_data(data, error_mod)
+          {:error, _reason} -> response.body
+        end
 
       {:error, reason} ->
         {:error, reason}
@@ -26,14 +29,8 @@ defmodule ExchangeZoo.Request do
     %{request | headers: [{key, value} | request.headers]}
   end
 
-  # TODO: Make this more generic, like an HMAC module, or something...
   def put_signature(%Finch.Request{} = request, secret_key) do
-    payload = "#{request.query}#{request.body}"
-
-    signature =
-      :crypto.mac(:hmac, :sha256, secret_key, payload)
-      |> Base.encode16(case: :lower)
-
+    signature = sign_payload("#{request.query}#{request.body}", secret_key)
     signature_param = URI.encode_query(signature: signature)
 
     query =
@@ -44,5 +41,12 @@ defmodule ExchangeZoo.Request do
       end
 
     %{request | query: query}
+  end
+
+  # TODO: Put this in an HMAC module, or something so in the
+  # future we can make more modular for other exchanges.
+  def sign_payload(payload, secret_key) do
+    :crypto.mac(:hmac, :sha256, secret_key, payload)
+    |> Base.encode16(case: :lower)
   end
 end
