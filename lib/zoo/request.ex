@@ -6,8 +6,8 @@ defmodule ExchangeZoo.Request do
     else
       {:ok, %Finch.Response{} = response} ->
         case Jason.decode(response.body) do
-          {:ok, data} -> model_from_data(data, error_mod)
-          {:error, _reason} -> response.body
+          {:ok, data} -> {:error, model_from_data(data, error_mod)}
+          {:error, _reason} -> {:error, response.body}
         end
 
       {:error, reason} ->
