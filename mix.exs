@@ -29,8 +29,7 @@ defmodule ExchangeZoo.MixProject do
     [
       {:castore, "~> 0.1.22"},
       {:finch, "~> 0.14"},
-      # {:wind, "~> 0.0.1"},
-      {:wind, path: "/Users/bfolkens/dev/bfolkens-github/wind"},
+      {:wind, "~> 0.2.1"},
       {:jason, "~> 1.1"},
       {:ecto, "~> 3.9"},
     ]
