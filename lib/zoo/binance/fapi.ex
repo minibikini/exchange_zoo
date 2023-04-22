@@ -70,6 +70,12 @@ defmodule ExchangeZoo.Binance.FAPI do
     |> perform_private(:delete, nil, opts)
   end
 
+  def change_initial_leverage(params \\ [], opts \\ []) do
+    build_url!("/fapi/v1/leverage", opts)
+    |> append_query_params(params)
+    |> perform_private(:post, nil, opts)
+  end
+
   defp build_url!(path, opts) do
     opts = Keyword.merge([uri: @base_url], opts)
     URI.new!(opts[:uri] <> path)
