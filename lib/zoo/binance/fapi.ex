@@ -43,7 +43,7 @@ defmodule ExchangeZoo.Binance.FAPI do
   def cancel_all_open_orders(params \\ [], opts \\ []) do
     build_url!("/fapi/v1/allOpenOrders", opts)
     |> append_query_params(params)
-    |> perform_private(:delete, opts)
+    |> perform_private(:delete, nil, opts)
   end
 
   def cancel_multiple_orders(params \\ [], opts \\ []) do
