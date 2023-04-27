@@ -34,6 +34,12 @@ defmodule ExchangeZoo.Binance.FAPI do
     |> perform_private(:post, Order, opts)
   end
 
+  def create_batch_orders(params \\ [], opts \\ []) do
+    build_url!("/fapi/v1/batchOrders", opts)
+    |> append_query_params(params)
+    |> perform_private(:post, Order, opts)
+  end
+
   def cancel_order(params \\ [], opts \\ []) do
     build_url!("/fapi/v1/order", opts)
     |> append_query_params(params)
@@ -86,7 +92,7 @@ defmodule ExchangeZoo.Binance.FAPI do
     |> Request.perform(mod)
   end
 
-  defp perform_private(url, method, mod, opts \\ []) do
+  defp perform_private(url, method, mod, opts) do
     api_key = Keyword.get(opts, :api_key, get_api_key())
     secret_key = Keyword.get(opts, :secret_key, get_secret_key())
 
