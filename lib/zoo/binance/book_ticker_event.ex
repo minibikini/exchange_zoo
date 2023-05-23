@@ -6,7 +6,7 @@ defmodule ExchangeZoo.Binance.Model.BookTickerEvent do
   @fields %{
     "u" => :order_book_update_id,
     "E" => :event_time,
-    "t" => :transaction_time,
+    "T" => :transaction_time,
     "s" => :symbol,
     "b" => :best_bid_price,
     "B" => :best_bid_qty,
@@ -30,4 +30,3 @@ defmodule ExchangeZoo.Binance.Model.BookTickerEvent do
     cast(event, attrs, __MODULE__.__schema__(:fields))
   end
 end
-

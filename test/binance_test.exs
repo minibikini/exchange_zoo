@@ -10,8 +10,18 @@ defmodule ExchangeZoo.BinanceTest do
     test "should parse /fapi/v1/exchangeInfo" do
       expected = %ExchangeInfo{
         assets: [
-          %Asset{id: nil, asset: "BUSD", margin_available: true, auto_asset_exchange: Decimal.new(0)},
-          %Asset{id: nil, asset: "USDT", margin_available: true, auto_asset_exchange: Decimal.new(0)},
+          %Asset{
+            id: nil,
+            asset: "BUSD",
+            margin_available: true,
+            auto_asset_exchange: Decimal.new(0)
+          },
+          %Asset{
+            id: nil,
+            asset: "USDT",
+            margin_available: true,
+            auto_asset_exchange: Decimal.new(0)
+          },
           %Asset{id: nil, asset: "BNB", margin_available: false, auto_asset_exchange: nil}
         ],
         exchange_filters: [],
@@ -53,7 +63,15 @@ defmodule ExchangeZoo.BinanceTest do
             underlying_sub_type: ["STORAGE"],
             settle_plan: 0,
             trigger_protect: Decimal.new("0.15"),
-            order_type: [:limit, :market, :stop, :stop_market, :take_profit, :take_profit_market, :trailing_stop_market],
+            order_type: [
+              :limit,
+              :market,
+              :stop,
+              :stop_market,
+              :take_profit,
+              :take_profit_market,
+              :trailing_stop_market
+            ],
             time_in_force: [:gtc, :ioc, :fok, :gtx],
             liquidation_fee: Decimal.new("0.010000"),
             market_take_bound: Decimal.new("0.30"),
@@ -240,6 +258,68 @@ defmodule ExchangeZoo.BinanceTest do
       assert expected ==
                json_fixture("binance/fapi_v1_openOrders")
                |> Enum.map(&Order.from!/1)
+    end
+  end
+
+  describe "BookTickerEvent" do
+    alias ExchangeZoo.Binance.Model.BookTickerEvent
+
+    test "should parse bookTicker event" do
+      expected = %BookTickerEvent{
+        order_book_update_id: 400_900_217,
+        event_time: 1_568_014_460_893,
+        transaction_time: 1_568_014_460_891,
+        symbol: "BNBUSDT",
+        best_bid_price: Decimal.new("25.35190000"),
+        best_bid_qty: Decimal.new("31.21000000"),
+        best_ask_price: Decimal.new("25.36520000"),
+        best_ask_qty: Decimal.new("40.66000000")
+      }
+
+      assert expected ==
+               json_fixture("binance/events/book_ticker")
+               |> FWS.parse_event()
+    end
+  end
+
+  describe "ContractInfoEvent" do
+    alias ExchangeZoo.Binance.Model.ContractInfoEvent
+    alias ExchangeZoo.Binance.Model.ContractInfoEvent.Bracket
+
+    test "should parse contractInfo event" do
+      expected = %ContractInfoEvent{
+        event_time: 1669356423908,
+        symbol: "IOTAUSDT",
+        pair: "IOTAUSDT",
+        contract_type: :perpetual,
+        delivery_time: 4133404800000,
+        onboard_time: 1569398400000,
+        contract_status: :trading,
+        brackets: [
+          %Bracket{
+            notional_bracket: 1,
+            floor_notional: 0,
+            cap_notional: 5000,
+            maint_ratio: Decimal.new("0.01"),
+            aux_num: 0,
+            min_leverage: 21,
+            max_leverage: 50
+          },
+          %Bracket{
+            notional_bracket: 2,
+            floor_notional: 5000,
+            cap_notional: 25000,
+            maint_ratio: Decimal.new("0.025"),
+            aux_num: 75,
+            min_leverage: 11,
+            max_leverage: 20
+          }
+        ]
+      }
+
+      assert expected ==
+               json_fixture("binance/events/contract_info")
+               |> FWS.parse_event()
     end
   end
 

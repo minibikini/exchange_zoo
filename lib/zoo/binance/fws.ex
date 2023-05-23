@@ -7,6 +7,7 @@ defmodule ExchangeZoo.Binance.FWS do
 
   alias ExchangeZoo.Binance.Model.{
     BookTickerEvent,
+    ContractInfoEvent,
     MarkPriceUpdateEvent,
     ListenKeyExpiredEvent,
     MarginCallEvent,
@@ -22,11 +23,9 @@ defmodule ExchangeZoo.Binance.FWS do
   @base_url "wss://stream.binancefuture.com/ws"
   # @base_url "wss://fstream.binance.com/ws"
 
-  @streams ~w(markPrice@1s bookTicker)
-
   def connect_uri(), do: URI.new!(@base_url)
 
-  # symbol, listen_key, callback_mod
+  # [params, listen_key, callback_mod]
   def start_link(opts) do
     opts = Keyword.merge([uri: connect_uri()], opts)
     Wind.Client.start_link(__MODULE__, opts)
@@ -34,10 +33,8 @@ defmodule ExchangeZoo.Binance.FWS do
 
   @impl true
   def handle_connect(state) do
-    params = [state.opts[:listen_key]] ++
-      Enum.map(@streams, fn stream -> "#{state.opts[:symbol]}@#{stream}" end)
-
-    message = Jason.encode!(%{method: "SUBSCRIBE", params: params, id: 1})
+    params = [state.opts[:listen_key]] ++ state.opts[:params]
+    message = Jason.encode!(%{method: "SUBSCRIBE", params: params, id: 1} |> IO.inspect())
 
     {:reply, {:text, message}, state}
   end
@@ -63,6 +60,9 @@ defmodule ExchangeZoo.Binance.FWS do
 
   def parse_event(%{"e" => "markPriceUpdate"} = data),
     do: MarkPriceUpdateEvent.from!(data)
+
+  def parse_event(%{"e" => "contractInfo"} = data),
+    do: ContractInfoEvent.from!(data)
 
   def parse_event(%{"e" => "bookTicker"} = data),
     do: BookTickerEvent.from!(data)
