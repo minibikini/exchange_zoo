@@ -1,6 +1,6 @@
 defmodule ExchangeZoo.Binance.FAPI do
-  alias ExchangeZoo.Request
-  alias ExchangeZoo.Binance.Model.{ExchangeInfo, LeverageBracket, BookTicker, Account, Order, ListenKey, Error}
+  import ExchangeZoo.Binance.Request
+  alias ExchangeZoo.Binance.Model.{ExchangeInfo, LeverageBracket, BookTicker, Account, Order, ListenKey}
 
   @base_url "https://testnet.binancefuture.com"
   # @base_url "https://fapi.binance.com"
@@ -91,29 +91,6 @@ defmodule ExchangeZoo.Binance.FAPI do
   defp build_url!(path, opts) do
     opts = Keyword.merge([uri: @base_url], opts)
     URI.new!(opts[:uri] <> path)
-  end
-
-  defp perform_public(url, method, mod) do
-    Finch.build(method, url)
-    |> Request.perform(mod)
-  end
-
-  defp perform_private(url, method, mod, opts) do
-    api_key = Keyword.get(opts, :api_key, get_api_key())
-    secret_key = Keyword.get(opts, :secret_key, get_secret_key())
-
-    Finch.build(method, url)
-    |> Request.add_header("X-MBX-APIKEY", api_key)
-    |> Request.put_signature(secret_key)
-    |> Request.perform(mod, Error)
-  end
-
-  defp get_api_key() do
-    System.get_env("BINANCE_FUTURES_API_KEY")
-  end
-
-  defp get_secret_key() do
-    System.get_env("BINANCE_FUTURES_API_SECRET")
   end
 
   defp append_query_params(%URI{} = uri, opts) do
