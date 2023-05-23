@@ -1,6 +1,6 @@
 defmodule ExchangeZoo.Binance.FAPI do
   alias ExchangeZoo.Request
-  alias ExchangeZoo.Binance.Model.{ExchangeInfo, LeverageBracket, Account, Order, ListenKey, Error}
+  alias ExchangeZoo.Binance.Model.{ExchangeInfo, LeverageBracket, BookTicker, Account, Order, ListenKey, Error}
 
   @base_url "https://testnet.binancefuture.com"
   # @base_url "https://fapi.binance.com"
@@ -14,6 +14,12 @@ defmodule ExchangeZoo.Binance.FAPI do
     build_url!("/fapi/v1/leverageBracket", opts)
     |> append_query_params(params)
     |> perform_private(:get, LeverageBracket, opts)
+  end
+
+  def get_order_book_ticker(params \\ [], opts \\ []) do
+    build_url!("/fapi/v1/ticker/bookTicker", opts)
+    |> append_query_params(params)
+    |> perform_private(:get, BookTicker, opts)
   end
 
   def get_account(params \\ [], opts \\ []) do

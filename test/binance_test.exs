@@ -261,6 +261,27 @@ defmodule ExchangeZoo.BinanceTest do
     end
   end
 
+  describe "BookTicker" do
+    alias ExchangeZoo.Binance.Model.BookTicker
+
+    test "should parse /fapi/v1/ticker/bookTicker" do
+      expected = [
+        %BookTicker{
+          symbol: "BTCUSDT",
+          bid_price: Decimal.new("4.00000000"),
+          bid_qty: Decimal.new("431.00000000"),
+          ask_price: Decimal.new("4.00000200"),
+          ask_qty: Decimal.new("9.00000000"),
+          time: 1_589_437_530_011
+        }
+      ]
+
+      assert expected ==
+               json_fixture("binance/fapi_v1_ticker_bookTicker")
+               |> Enum.map(&BookTicker.from!/1)
+    end
+  end
+
   describe "BookTickerEvent" do
     alias ExchangeZoo.Binance.Model.BookTickerEvent
 
@@ -288,12 +309,12 @@ defmodule ExchangeZoo.BinanceTest do
 
     test "should parse contractInfo event" do
       expected = %ContractInfoEvent{
-        event_time: 1669356423908,
+        event_time: 1_669_356_423_908,
         symbol: "IOTAUSDT",
         pair: "IOTAUSDT",
         contract_type: :perpetual,
-        delivery_time: 4133404800000,
-        onboard_time: 1569398400000,
+        delivery_time: 4_133_404_800_000,
+        onboard_time: 1_569_398_400_000,
         contract_status: :trading,
         brackets: [
           %Bracket{
