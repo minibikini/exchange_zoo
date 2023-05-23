@@ -6,6 +6,7 @@ defmodule ExchangeZoo.Binance.FWS do
   use Wind.Client, ping_timer: 30_000
 
   alias ExchangeZoo.Binance.Model.{
+    BookTickerEvent,
     MarkPriceUpdateEvent,
     ListenKeyExpiredEvent,
     MarginCallEvent,
@@ -21,6 +22,8 @@ defmodule ExchangeZoo.Binance.FWS do
   @base_url "wss://stream.binancefuture.com/ws"
   # @base_url "wss://fstream.binance.com/ws"
 
+  @streams ~w(markPrice@1s bookTicker)
+
   def connect_uri(), do: URI.new!(@base_url)
 
   # symbol, listen_key, callback_mod
@@ -31,8 +34,10 @@ defmodule ExchangeZoo.Binance.FWS do
 
   @impl true
   def handle_connect(state) do
-    streams = [state.opts[:listen_key], "#{state.opts[:symbol]}@markPrice@1s"]
-    message = Jason.encode!(%{method: "SUBSCRIBE", params: streams, id: 1})
+    params = [state.opts[:listen_key]] ++
+      Enum.map(@streams, fn stream -> "#{state.opts[:symbol]}@#{stream}" end)
+
+    message = Jason.encode!(%{method: "SUBSCRIBE", params: params, id: 1})
 
     {:reply, {:text, message}, state}
   end
@@ -44,8 +49,11 @@ defmodule ExchangeZoo.Binance.FWS do
     {:ok, callback_state} =
       case parse_event(data) do
         # TODO: Pass error messages too (we'll need them in the UI)
-        :subscribed -> {:ok, state.opts[:callback_state]}
-        event -> state.opts[:callback_mod].handle_event({:event, event}, state.opts[:callback_state])
+        :subscribed ->
+          {:ok, state.opts[:callback_state]}
+
+        event ->
+          state.opts[:callback_mod].handle_event({:event, event}, state.opts[:callback_state])
       end
 
     {:noreply, put_in(state[:opts][:callback_state], callback_state)}
@@ -55,6 +63,9 @@ defmodule ExchangeZoo.Binance.FWS do
 
   def parse_event(%{"e" => "markPriceUpdate"} = data),
     do: MarkPriceUpdateEvent.from!(data)
+
+  def parse_event(%{"e" => "bookTicker"} = data),
+    do: BookTickerEvent.from!(data)
 
   def parse_event(%{"e" => "listenKeyExpired"} = data),
     do: ListenKeyExpiredEvent.from!(data)
