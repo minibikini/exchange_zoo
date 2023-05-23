@@ -34,7 +34,7 @@ defmodule ExchangeZoo.Binance.FWS do
   @impl true
   def handle_connect(state) do
     params = [state.opts[:listen_key]] ++ state.opts[:params]
-    message = Jason.encode!(%{method: "SUBSCRIBE", params: params, id: 1} |> IO.inspect())
+    message = Jason.encode!(%{method: "SUBSCRIBE", params: params, id: 1})
 
     {:reply, {:text, message}, state}
   end
