@@ -1,6 +1,6 @@
 # ExchangeZoo
 
-**TODO: Add description**
+A collection of cryptocurrency exchange APIs.  Currently a work in progress.
 
 ## Installation
 
