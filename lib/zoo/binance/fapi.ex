@@ -1,6 +1,15 @@
 defmodule ExchangeZoo.Binance.FAPI do
   import ExchangeZoo.Binance.Request
-  alias ExchangeZoo.Binance.Model.{ExchangeInfo, LeverageBracket, BookTicker, Account, Order, ListenKey}
+
+  alias ExchangeZoo.Binance.Model.{
+    AssetIndex,
+    ExchangeInfo,
+    LeverageBracket,
+    BookTicker,
+    Account,
+    Order,
+    ListenKey
+  }
 
   @base_url "https://testnet.binancefuture.com"
   # @base_url "https://fapi.binance.com"
@@ -8,6 +17,12 @@ defmodule ExchangeZoo.Binance.FAPI do
   def get_exchange_info(opts \\ []) do
     build_url!("/fapi/v1/exchangeInfo", opts)
     |> perform_public(:get, ExchangeInfo)
+  end
+
+  def get_asset_index(params \\ [], opts \\ []) do
+    build_url!("/fapi/v1/assetIndex", opts)
+    |> append_query_params(params)
+    |> perform_public(:get, AssetIndex)
   end
 
   def get_leverage_bracket(params \\ [], opts \\ []) do

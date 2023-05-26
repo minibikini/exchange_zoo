@@ -110,8 +110,34 @@ defmodule ExchangeZoo.BinanceTest do
       }
 
       assert expected ==
-               json_fixture("binance/fapi_v1_exchange_info")
+               json_fixture("binance/fapi_v1_exchangeInfo")
                |> ExchangeInfo.from!()
+    end
+  end
+
+  describe "AssetIndex" do
+    alias ExchangeZoo.Binance.Model.AssetIndex
+
+    test "should parse /fapi/v1/assetIndex" do
+      expected = [
+        %AssetIndex{
+          symbol: "ADAUSD",
+          time: 1_635_740_268_004,
+          index: Decimal.new("1.92957370"),
+          bid_buffer: Decimal.new("0.10000000"),
+          ask_buffer: Decimal.new("0.10000000"),
+          bid_rate: Decimal.new("1.73661633"),
+          ask_rate: Decimal.new("2.12253107"),
+          auto_exchange_bid_buffer: Decimal.new("0.05000000"),
+          auto_exchange_ask_buffer: Decimal.new("0.05000000"),
+          auto_exchange_bid_rate: Decimal.new("1.83309501"),
+          auto_exchange_ask_rate: Decimal.new("2.02605238")
+        }
+      ]
+
+      assert expected ==
+               json_fixture("binance/fapi_v1_assetIndex")
+               |> Enum.map(&AssetIndex.from!/1)
     end
   end
 
