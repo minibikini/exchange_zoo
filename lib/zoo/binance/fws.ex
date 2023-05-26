@@ -8,6 +8,7 @@ defmodule ExchangeZoo.Binance.FWS do
   alias ExchangeZoo.Binance.Model.{
     BookTickerEvent,
     ContractInfoEvent,
+    AssetIndexUpdateEvent,
     MarkPriceUpdateEvent,
     ListenKeyExpiredEvent,
     MarginCallEvent,
@@ -57,6 +58,9 @@ defmodule ExchangeZoo.Binance.FWS do
   end
 
   def parse_event(%{"id" => 1, "result" => nil}), do: :subscribed
+
+  def parse_event(%{"e" => "assetIndexUpdate"} = data),
+    do: AssetIndexUpdateEvent.from!(data)
 
   def parse_event(%{"e" => "markPriceUpdate"} = data),
     do: MarkPriceUpdateEvent.from!(data)

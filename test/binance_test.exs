@@ -610,4 +610,28 @@ defmodule ExchangeZoo.BinanceTest do
                |> FWS.parse_event()
     end
   end
+
+  describe "AssetIndexEvent" do
+    alias ExchangeZoo.Binance.Model.AssetIndexUpdateEvent
+
+    test "should parse assetIndex event" do
+      expected = %AssetIndexUpdateEvent{
+        event_time: 1_685_120_787_000,
+        symbol: "ADAUSD",
+        index: Decimal.new("0.35965432"),
+        bid_buffer: Decimal.new("0.10000000"),
+        ask_buffer: Decimal.new("0.10000000"),
+        bid_rate: Decimal.new("0.32368889"),
+        ask_rate: Decimal.new("0.39561976"),
+        auto_exchange_bid_buffer: Decimal.new("0.05000000"),
+        auto_exchange_ask_buffer: Decimal.new("0.05000000"),
+        auto_exchange_bid_rate: Decimal.new("0.34167161"),
+        auto_exchange_ask_rate: Decimal.new("0.37763704")
+      }
+
+      assert expected ==
+               json_fixture("binance/events/asset_index_update")
+               |> FWS.parse_event()
+    end
+  end
 end
