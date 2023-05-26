@@ -62,6 +62,9 @@ defmodule ExchangeZoo.Binance.FWS do
   def parse_event(%{"e" => "assetIndexUpdate"} = data),
     do: AssetIndexUpdateEvent.from!(data)
 
+  def parse_event([%{"e" => "assetIndexUpdate"} | _] = data),
+    do: Enum.map(data, &AssetIndexUpdateEvent.from!/1)
+
   def parse_event(%{"e" => "markPriceUpdate"} = data),
     do: MarkPriceUpdateEvent.from!(data)
 
