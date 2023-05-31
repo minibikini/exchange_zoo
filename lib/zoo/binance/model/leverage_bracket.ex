@@ -22,6 +22,8 @@ end
 defmodule ExchangeZoo.Binance.Model.LeverageBracket.Bracket do
   use ExchangeZoo.Model
 
+  @primary_key false
+
   embedded_schema do
     field :bracket, :integer
     field :initial_leverage, :decimal

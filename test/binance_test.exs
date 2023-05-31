@@ -11,30 +11,26 @@ defmodule ExchangeZoo.BinanceTest do
       expected = %ExchangeInfo{
         assets: [
           %Asset{
-            id: nil,
             asset: "BUSD",
             margin_available: true,
             auto_asset_exchange: Decimal.new(0)
           },
           %Asset{
-            id: nil,
             asset: "USDT",
             margin_available: true,
             auto_asset_exchange: Decimal.new(0)
           },
-          %Asset{id: nil, asset: "BNB", margin_available: false, auto_asset_exchange: nil}
+          %Asset{asset: "BNB", margin_available: false, auto_asset_exchange: nil}
         ],
         exchange_filters: [],
         rate_limits: [
           %RateLimit{
-            id: nil,
             interval: :minute,
             interval_num: 1,
             limit: 2400,
             rate_limit_type: :request_weight
           },
           %RateLimit{
-            id: nil,
             interval: :minute,
             interval_num: 1,
             limit: 1200,
@@ -43,7 +39,6 @@ defmodule ExchangeZoo.BinanceTest do
         ],
         symbols: [
           %Symbol{
-            id: nil,
             symbol: "BLZUSDT",
             pair: "BLZUSDT",
             contract_type: :perpetual,
@@ -150,7 +145,6 @@ defmodule ExchangeZoo.BinanceTest do
         symbol: "ETHUSDT",
         brackets: [
           %Bracket{
-            id: nil,
             bracket: 1,
             initial_leverage: Decimal.new("75"),
             notional_cap: Decimal.new("10000"),

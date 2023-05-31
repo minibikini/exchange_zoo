@@ -28,6 +28,8 @@ end
 defmodule ExchangeZoo.Binance.Model.ExchangeInfo.Asset do
   use ExchangeZoo.Model
 
+  @primary_key false
+
   embedded_schema do
     field :asset, :string
     field :margin_available, :boolean
@@ -41,6 +43,8 @@ end
 
 defmodule ExchangeZoo.Binance.Model.ExchangeInfo.Symbol do
   use ExchangeZoo.Model
+
+  @primary_key false
 
   @contract_types ~w(perpetual current_month next_month current_quarter next_quarter perpetual_delivering)a
   @statuses ~w(pending_trading trading pre_delivering delivering delivered pre_settle settling close)a
@@ -84,6 +88,8 @@ end
 
 defmodule ExchangeZoo.Binance.Model.ExchangeInfo.RateLimit do
   use ExchangeZoo.Model
+
+  @primary_key false
 
   @intervals ~w(second minute)a
   @types ~w(request_weight orders)a
