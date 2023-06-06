@@ -36,10 +36,10 @@ defmodule ExchangeZoo.Model do
     end)
   end
 
-  def prepare_enums(attrs, keys) do
+  def prepare_enums(attrs, keys, prep_fun \\ fn v -> Macro.underscore(v) end) do
     update_values(attrs, keys, fn
-      v when is_list(v) -> Enum.map(v, &String.downcase/1)
-      v when is_binary(v) -> String.downcase(v)
+      v when is_list(v) -> Enum.map(v, prep_fun)
+      v when is_binary(v) -> prep_fun.(v)
       v -> v
     end)
   end

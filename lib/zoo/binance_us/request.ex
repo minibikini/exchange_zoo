@@ -13,7 +13,7 @@ defmodule ExchangeZoo.BinanceUS.Request do
 
     Finch.build(method, url)
     |> Request.add_header("X-MBX-APIKEY", api_key)
-    |> Request.put_signature(secret_key)
+    |> Request.put_query_signature("signature", secret_key)
     |> Request.perform(mod, Error)
   end
 
