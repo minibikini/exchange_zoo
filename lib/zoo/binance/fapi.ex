@@ -11,8 +11,7 @@ defmodule ExchangeZoo.Binance.FAPI do
     ListenKey
   }
 
-  @base_url "https://testnet.binancefuture.com"
-  # @base_url "https://fapi.binance.com"
+  @base_url "https://fapi.binance.com"
 
   def get_exchange_info(opts \\ []) do
     build_url!("/fapi/v1/exchangeInfo", opts)

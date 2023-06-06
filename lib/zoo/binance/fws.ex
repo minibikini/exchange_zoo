@@ -21,8 +21,7 @@ defmodule ExchangeZoo.Binance.FWS do
 
   require Logger
 
-  @base_url "wss://stream.binancefuture.com/ws"
-  # @base_url "wss://fstream.binance.com/ws"
+  @base_url "wss://fstream.binance.com/ws"
 
   def connect_uri(), do: URI.new!(@base_url)
 
