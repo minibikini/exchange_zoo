@@ -5,9 +5,11 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
   Generates boilerplate code for a Model.
 
       $ mix zoo.gen.model Exchange Record message:string code:integer
+      $ mix zoo.gen.model Exchange Record --example=example.json
 
   Accepts the module name for the exchange, a module name for the model, and a
-  list of attributes with Ecto types
+  list of attributes with Ecto types.  Alternatively, an example JSON file can
+  be given to infer the model attributes.
 
   The generated files will contain:
 
