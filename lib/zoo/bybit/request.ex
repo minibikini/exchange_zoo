@@ -8,8 +8,8 @@ defmodule ExchangeZoo.Bybit.Request do
   end
 
   def perform_private(url, method, mod, opts) do
-    api_key = Keyword.get(opts, :api_key, get_api_key())
-    secret_key = Keyword.get(opts, :secret_key, get_secret_key())
+    api_key = Keyword.fetch!(opts, :api_key)
+    secret_key = Keyword.fetch!(opts, :secret_key)
     timestamp = Keyword.get(opts, :timestamp, DateTime.utc_now() |> DateTime.to_unix(:millisecond))
     recv_window = Keyword.get(opts, :recv_window, 5000)
 
@@ -21,14 +21,6 @@ defmodule ExchangeZoo.Bybit.Request do
       "#{timestamp}#{api_key}#{recv_window}#{request.query}#{request.body}"
     end)
     |> Request.perform(mod, Error, &decoder/2)
-  end
-
-  defp get_api_key() do
-    System.get_env("BYBIT_API_KEY")
-  end
-
-  defp get_secret_key() do
-    System.get_env("BYBIT_API_SECRET")
   end
 
   defp decoder(body, mod) do
