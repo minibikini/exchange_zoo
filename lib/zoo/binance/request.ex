@@ -16,4 +16,11 @@ defmodule ExchangeZoo.Binance.Request do
     |> Request.put_query_signature("signature", secret_key)
     |> Request.perform(mod, Error)
   end
+
+  def append_query_params(%URI{} = uri, opts) do
+    now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
+    opts = Keyword.put_new(opts, :timestamp, now)
+
+    Request.append_query_params(uri, opts)
+  end
 end

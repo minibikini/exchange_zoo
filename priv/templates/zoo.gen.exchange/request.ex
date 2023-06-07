@@ -11,4 +11,6 @@ defmodule ExchangeZoo.<%= @exchange.name %>.Request do
     # TODO: Implement me
     raise "Not yet implemented"
   end
+
+  defdelegate append_query_params(uri, opts), to: Request
 end

@@ -51,6 +51,10 @@ defmodule ExchangeZoo.Request do
     %{request | query: query}
   end
 
+  def append_query_params(%URI{} = uri, opts) do
+    URI.append_query(uri, URI.encode_query(opts))
+  end
+
   # TODO: Put this in an HMAC module, or something so in the
   # future we can make more modular for other exchanges.
   def sign_payload(payload, secret_key) do

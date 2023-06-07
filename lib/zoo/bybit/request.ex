@@ -23,6 +23,8 @@ defmodule ExchangeZoo.Bybit.Request do
     |> Request.perform(mod, Error, &decoder/2)
   end
 
+  defdelegate append_query_params(uri, opts), to: Request
+
   defp decoder(body, mod) do
     case Jason.decode(body) do
       {:ok, %{"retCode" => 0, "result" => data}} -> {:ok, Request.model_from_data(data |> IO.inspect(), mod)}

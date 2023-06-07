@@ -1,116 +1,27 @@
 defmodule ExchangeZoo.Binance.FAPI do
+  use ExchangeZoo.API, base_url: "https://fapi.binance.com"
+
   import ExchangeZoo.Binance.Request
 
-  alias ExchangeZoo.Binance.Model.{
-    AssetIndex,
-    ExchangeInfo,
-    LeverageBracket,
-    BookTicker,
-    Account,
-    Order,
-    ListenKey
-  }
-
-  @base_url "https://fapi.binance.com"
+  alias ExchangeZoo.Binance.Model
 
   def get_exchange_info(opts \\ []) do
     build_url!("/fapi/v1/exchangeInfo", opts)
-    |> perform_public(:get, ExchangeInfo)
+    |> perform_public(:get, Model.ExchangeInfo)
   end
 
-  def get_asset_index(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/assetIndex", opts)
-    |> append_query_params(params)
-    |> perform_public(:get, AssetIndex)
-  end
-
-  def get_leverage_bracket(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/leverageBracket", opts)
-    |> append_query_params(params)
-    |> perform_private(:get, LeverageBracket, opts)
-  end
-
-  def get_order_book_ticker(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/ticker/bookTicker", opts)
-    |> append_query_params(params)
-    |> perform_private(:get, BookTicker, opts)
-  end
-
-  def get_account(params \\ [], opts \\ []) do
-    build_url!("/fapi/v2/account", opts)
-    |> append_query_params(params)
-    |> perform_private(:get, Account, opts)
-  end
-
-  def get_open_orders(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/openOrders", opts)
-    |> append_query_params(params)
-    |> perform_private(:get, Order, opts)
-  end
-
-  def create_order(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/order", opts)
-    |> append_query_params(params)
-    |> perform_private(:post, Order, opts)
-  end
-
-  def create_batch_orders(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/batchOrders", opts)
-    |> append_query_params(params)
-    |> perform_private(:post, Order, opts)
-  end
-
-  def cancel_order(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/order", opts)
-    |> append_query_params(params)
-    |> perform_private(:delete, Order, opts)
-  end
-
-  def cancel_all_open_orders(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/allOpenOrders", opts)
-    |> append_query_params(params)
-    |> perform_private(:delete, nil, opts)
-  end
-
-  def cancel_multiple_orders(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/batchOrders", opts)
-    |> append_query_params(params)
-    |> perform_private(:delete, Order, opts)
-  end
-
-  def start_user_data_stream(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/listenKey", opts)
-    |> append_query_params(params)
-    |> perform_private(:post, ListenKey, opts)
-  end
-
-  def keepalive_user_data_stream(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/listenKey", opts)
-    |> append_query_params(params)
-    |> perform_private(:put, nil, opts)
-  end
-
-  def close_user_data_stream(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/listenKey", opts)
-    |> append_query_params(params)
-    |> perform_private(:delete, nil, opts)
-  end
-
-  def change_initial_leverage(params \\ [], opts \\ []) do
-    build_url!("/fapi/v1/leverage", opts)
-    |> append_query_params(params)
-    |> perform_private(:post, nil, opts)
-  end
-
-  defp build_url!(path, opts) do
-    opts = Keyword.merge([uri: @base_url], opts)
-    URI.new!(opts[:uri] <> path)
-  end
-
-  defp append_query_params(%URI{} = uri, opts) do
-    now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
-    opts = Keyword.put_new(opts, :timestamp, now)
-
-    URI.append_query(uri, URI.encode_query(opts))
-  end
+  endpoint :get, "/fapi/v1/assetIndex", Model.AssetIndex
+  endpoint :get, "/fapi/v1/leverageBracket", Model.LeverageBracket
+  endpoint :get, "/fapi/v1/ticker/bookTicker", Model.BookTicker, as: :get_order_book_ticker
+  endpoint :get, "/fapi/v2/account", Model.Account
+  endpoint :get, "/fapi/v1/openOrders", Model.Order
+  endpoint :post, "/fapi/v1/order", Model.Order
+  endpoint :post, "/fapi/v1/batchOrders", Model.Order
+  endpoint :delete, "/fapi/v1/order", Model.Order, as: :cancel_order
+  endpoint :delete, "/fapi/v1/allOpenOrders", nil, as: :cancel_all_open_orders
+  endpoint :delete, "/fapi/v1/batchOrders", Model.Order, as: :cancel_multiple_orders
+  endpoint :post, "/fapi/v1/listenKey", Model.ListenKey, as: :start_user_data_stream
+  endpoint :put, "/fapi/v1/listenKey", nil, as: :keepalive_user_data_stream
+  endpoint :delete, "/fapi/v1/listenKey", nil, as: :close_user_data_stream
+  endpoint :post, "/fapi/v1/leverage", nil, as: :change_initial_leverage
 end

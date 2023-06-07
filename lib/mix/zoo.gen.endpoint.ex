@@ -15,4 +15,10 @@ defmodule Mix.Tasks.Zoo.Gen.Endpoint do
     * a model `lib/zoo/exchange/model/exchange_info.ex`
     * a fixture `test/support/fixtures/exchange/v1_api_exchangeInfo.json`
   """
+
+  use Mix.Task
+
+  def run(_opts) do
+    # TODO
+  end
 end

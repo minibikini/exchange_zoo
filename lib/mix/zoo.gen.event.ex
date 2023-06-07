@@ -14,4 +14,10 @@ defmodule Mix.Tasks.Zoo.Gen.Event do
     * a model `lib/zoo/exchange/model/account_update_event.ex`
     * a fixture `test/support/fixtures/exchange/events/account_update_event.json`
   """
+
+  use Mix.Task
+
+  def run(_opts) do
+    # TODO
+  end
 end
