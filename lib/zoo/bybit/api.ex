@@ -5,5 +5,5 @@ defmodule ExchangeZoo.Bybit.API do
 
   alias ExchangeZoo.Bybit.Model
 
-  endpoint :get, "/v5/market/instruments-info", Model.InstrumentsInfo
+  public :get, "/v5/market/instruments-info", Model.InstrumentsInfo
 end

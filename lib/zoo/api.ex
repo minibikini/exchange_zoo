@@ -9,8 +9,8 @@ defmodule ExchangeZoo.API do
 
         alias ExchangeZoo.Binance.Model
 
-        endpoint :get, "/fapi/v1/assetIndex", Model.AssetIndex
-        endpoint :get, "/fapi/v1/leverageBracke", Model.LeverageBracket
+        public :get, "/fapi/v1/assetIndex", Model.AssetIndex
+        private :get, "/fapi/v1/leverageBracke", Model.LeverageBracket
         ...
       end
   """
@@ -41,14 +41,14 @@ defmodule ExchangeZoo.API do
   end
 
   @doc """
-  Defines an endpoint function with the given method and URL.
+  Defines a public endpoint function with the given method and URL.
 
   ## Examples
 
-      endpoint :get, "/v5/instrumentsInfo"
-      endpoint :post, "/v1/order", as: :create_order
+      public :get, "/v5/instrumentsInfo"
+      private :post, "/v1/order", as: :create_order
   """
-  defmacro endpoint(method, path, model, opts \\ []) do
+  defmacro public(method, path, model, opts \\ []) do
     fun_name =
       Keyword.get_lazy(opts, :as, fn ->
         to_function_name(method, path)
@@ -59,6 +59,28 @@ defmodule ExchangeZoo.API do
         build_url!(unquote(path), opts)
         |> append_query_params(params)
         |> perform_public(unquote(method), unquote(model))
+      end
+    end
+  end
+
+  @doc """
+  Defines a private endpoint function with the given method and URL.
+
+  ## Examples
+
+      private :post, "/v1/order", as: :create_order
+  """
+  defmacro private(method, path, model, opts \\ []) do
+    fun_name =
+      Keyword.get_lazy(opts, :as, fn ->
+        to_function_name(method, path)
+      end)
+
+    quote do
+      def unquote(fun_name)(params \\ [], opts \\ []) do
+        build_url!(unquote(path), opts)
+        |> append_query_params(params)
+        |> perform_private(unquote(method), unquote(model), unquote(opts))
       end
     end
   end
