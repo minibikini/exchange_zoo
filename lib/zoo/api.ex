@@ -19,17 +19,16 @@ defmodule ExchangeZoo.API do
   defmacro __using__(opts) do
     base_url = Keyword.fetch!(opts, :base_url)
 
-    # ["ExchangeZoo", parent_module | _] = Module.split(__CALLER__.module)
-    # request_module = String.to_atom("ExchangeZoo.#{parent_module}.Request")
+    request_module =
+      __CALLER__.module
+      |> Module.split()
+      |> Enum.slice(0, 2)
+      |> Kernel.++(["Request"])
+      |> Module.concat()
 
     quote do
       import ExchangeZoo.API
-
-      # TODO: Somehow import this so we don't have to explicitly include
-      # Request module but somehow we need to figure out how to handle the fact
-      # that the module code isn't compiled yet when we unquote.
-      #
-      # import unquote(request_module)
+      import unquote(request_module)
 
       @base_url unquote(base_url)
 

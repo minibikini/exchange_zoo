@@ -1,8 +1,6 @@
 defmodule ExchangeZoo.Binance.FAPI do
   use ExchangeZoo.API, base_url: "https://fapi.binance.com"
 
-  import ExchangeZoo.Binance.Request
-
   alias ExchangeZoo.Binance.Model
 
   def get_exchange_info(opts \\ []) do
