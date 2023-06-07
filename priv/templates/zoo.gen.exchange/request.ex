@@ -3,6 +3,8 @@ defmodule ExchangeZoo.<%= @exchange.name %>.Request do
   alias ExchangeZoo.<%= @exchange.name %>.Model.Error
 
   def perform_public(url, method, mod) do
+    url = append_query_params(url, params)
+
     Finch.build(method, url)
     |> Request.perform(mod, Error)
   end

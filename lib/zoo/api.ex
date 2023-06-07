@@ -56,8 +56,7 @@ defmodule ExchangeZoo.API do
     quote do
       def unquote(fun_name)(params \\ [], opts \\ []) do
         build_url!(unquote(path), opts)
-        |> append_query_params(params)
-        |> perform_public(unquote(method), unquote(model))
+        |> perform_public(unquote(method), params, unquote(model))
       end
     end
   end
@@ -70,16 +69,12 @@ defmodule ExchangeZoo.API do
       private :post, "/v1/order", as: :create_order
   """
   defmacro private(method, path, model, opts \\ []) do
-    fun_name =
-      Keyword.get_lazy(opts, :as, fn ->
-        to_function_name(method, path)
-      end)
+    fun_name = Keyword.get_lazy(opts, :as, fn -> to_function_name(method, path) end)
 
     quote do
       def unquote(fun_name)(params \\ [], opts \\ []) do
         build_url!(unquote(path), opts)
-        |> append_query_params(params)
-        |> perform_private(unquote(method), unquote(model), unquote(opts))
+        |> perform_private(unquote(method), params, unquote(model), opts)
       end
     end
   end

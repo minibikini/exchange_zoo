@@ -54,4 +54,19 @@ defmodule ExchangeZoo.BybitTest do
                |> InstrumentsInfo.from!()
     end
   end
+
+  describe "OrderResponse" do
+    alias ExchangeZoo.Bybit.Model.OrderResponse
+
+    test "should parse /v5/order/create" do
+      expected = %OrderResponse{
+        order_id: "1321003749386327552",
+        order_link_id: "spot-test-postonly"
+      }
+
+      assert expected ==
+               json_fixture("bybit/v5_order_create")
+               |> OrderResponse.from!()
+    end
+  end
 end

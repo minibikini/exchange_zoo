@@ -5,7 +5,7 @@ defmodule ExchangeZoo.Binance.FAPI do
 
   def get_exchange_info(opts \\ []) do
     build_url!("/fapi/v1/exchangeInfo", opts)
-    |> perform_public(:get, Model.ExchangeInfo)
+    |> perform_public(:get, [], Model.ExchangeInfo)
   end
 
   public :get, "/fapi/v1/assetIndex", Model.AssetIndex

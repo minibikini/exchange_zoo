@@ -2,12 +2,16 @@ defmodule ExchangeZoo.Binance.Request do
   alias ExchangeZoo.Request
   alias ExchangeZoo.Binance.Model.Error
 
-  def perform_public(url, method, mod) do
+  def perform_public(url, method, params, mod) do
+    url = append_query_params(url, params)
+
     Finch.build(method, url)
     |> Request.perform(mod)
   end
 
-  def perform_private(url, method, mod, opts) do
+  def perform_private(url, method, params, mod, opts) do
+    url = append_query_params(url, params)
+
     api_key = Keyword.fetch!(opts, :api_key)
     secret_key = Keyword.fetch!(opts, :secret_key)
 
