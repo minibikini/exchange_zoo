@@ -99,5 +99,6 @@ defmodule ExchangeZoo.API do
   end
 
   defp method_to_prefix(:post), do: "create"
+  defp method_to_prefix(:put), do: "update"
   defp method_to_prefix(method), do: method
 end
