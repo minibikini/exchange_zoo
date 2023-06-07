@@ -10,12 +10,8 @@ defmodule Mix.Zoo.Model do
 
     %__MODULE__{
       name: model_name,
-      types: types(attrs)
+      types: Enum.into(attrs, %{})
     }
-  end
-
-  defp types(attrs) do
-    Enum.into(attrs, %{}, fn {key, val} -> {key, val} end)
   end
 
   def format_fields_for_schema(schema) do
@@ -27,7 +23,7 @@ defmodule Mix.Zoo.Model do
   def extract_attr_flags(cli_attrs) do
     Enum.map(cli_attrs, fn attr ->
       [attr_name, type] = String.split(attr, ":")
-      {String.to_atom(attr_name), type}
+      {String.to_atom(attr_name), String.to_atom(type)}
     end)
   end
 end
