@@ -19,7 +19,7 @@ defmodule ExchangeZoo.API do
   defmacro __using__(opts) do
     base_url = Keyword.fetch!(opts, :base_url)
 
-    # ["ExchangeZoo", parent_module | _] = Module.split(definition)
+    # ["ExchangeZoo", parent_module | _] = Module.split(__CALLER__.module)
     # request_module = String.to_atom("ExchangeZoo.#{parent_module}.Request")
 
     quote do
