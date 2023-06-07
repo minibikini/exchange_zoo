@@ -12,6 +12,8 @@ defmodule ExchangeZoo.Binance.FAPI do
 
   public :get, "/fapi/v1/assetIndex", Model.AssetIndex
   private :get, "/fapi/v1/leverageBracket", Model.LeverageBracket
+  private :get, "/fapi/v1/ticker/bookTicker", Model.BookTicker, as: :order_book_ticker
+  private :get, "/fapi/v2/account", Model.Account
   private :get, "/fapi/v1/openOrders", Model.Order
   private :post, "/fapi/v1/order", Model.Order
   private :post, "/fapi/v1/batchOrders", Model.Order
