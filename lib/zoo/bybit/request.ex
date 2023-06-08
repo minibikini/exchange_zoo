@@ -9,7 +9,25 @@ defmodule ExchangeZoo.Bybit.Request do
     |> Request.perform(mod, Error, &decode/3)
   end
 
+  def perform_private(url, :get, params, mod, opts) do
+    url = append_query_params(url, params)
+
+    Finch.build(:get, url)
+    |> append_headers(opts)
+    |> Request.perform(mod, Error, &decode/3)
+  end
+
   def perform_private(url, method, params, mod, opts) do
+    body = Jason.encode!(params)
+
+    Finch.build(method, url, [], body)
+    |> append_headers(opts)
+    |> Request.perform(mod, Error, &decode/3)
+  end
+
+  defdelegate append_query_params(uri, opts), to: Request
+
+  defp append_headers(request, opts) do
     api_key = Keyword.fetch!(opts, :api_key)
     secret_key = Keyword.fetch!(opts, :secret_key)
 
@@ -18,19 +36,14 @@ defmodule ExchangeZoo.Bybit.Request do
 
     recv_window = Keyword.get(opts, :recv_window, 5000)
 
-    body = Jason.encode!(params)
-
-    Finch.build(method, url, [], body)
+    request
     |> Request.add_header("X-BAPI-API-KEY", api_key)
     |> Request.add_header("X-BAPI-TIMESTAMP", to_string(timestamp))
     |> Request.add_header("X-BAPI-RECV-WINDOW", to_string(recv_window))
     |> Request.put_header_signature("X-BAPI-SIGN", secret_key, fn request ->
       "#{timestamp}#{api_key}#{recv_window}#{request.query}#{request.body}"
     end)
-    |> Request.perform(mod, Error, &decode/3)
   end
-
-  defdelegate append_query_params(uri, opts), to: Request
 
   defp decode(%Finch.Response{status: 200} = response, mod, error_mod) do
     case Jason.decode(response.body) do
