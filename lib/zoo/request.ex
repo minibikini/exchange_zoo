@@ -1,20 +1,30 @@
 defmodule ExchangeZoo.Request do
-  def perform(request, mod, error_mod \\ nil, decoder \\ &decode/2) do
-    with {:ok, %Finch.Response{status: 200} = response} <- Finch.request(request, ExchangeZoo.Finch) do
-      decoder.(response.body, mod)
-    else
-      {:ok, %Finch.Response{} = response} ->
-        decoder.(response.body, error_mod)
+  @type decoder() ::
+          (Finch.Response.t(), module, module -> {:ok, term()} | {:error, integer(), any()})
+
+  @spec perform(Finch.Request.t(), module, module | nil, decoder) ::
+          {:ok, term()} | {:error, integer(), any()} | {:error, any()}
+  def perform(request, mod, error_mod \\ nil, decoder \\ &decode/3) do
+    case Finch.request(request, ExchangeZoo.Finch) do
+      {:ok, response} ->
+        decoder.(response, mod, error_mod)
 
       {:error, reason} ->
         {:error, reason}
     end
   end
 
-  def decode(body, mod) do
-    case Jason.decode(body) do
-      {:ok, data} -> {:error, model_from_data(data, mod)}
-      {:error, _reason} -> {:error, body}
+  def decode(%Finch.Response{status: 200} = response, mod, _error_mod) do
+    case Jason.decode(response.body) do
+      {:ok, data} -> {:ok, model_from_data(data, mod)}
+      {:error, _reason} -> {:error, response.status, response.body}
+    end
+  end
+
+  def decode(response, _mod, error_mod) do
+    case Jason.decode(response.body) do
+      {:ok, data} -> {:error, response.status, model_from_data(data, error_mod)}
+      {:error, _reason} -> {:error, response.status, response.body}
     end
   end
 
@@ -32,12 +42,22 @@ defmodule ExchangeZoo.Request do
     %{request | headers: [{key, value} | request.headers]}
   end
 
-  def put_header_signature(%Finch.Request{} = request, header_key, secret_key, payload \\ fn request -> "#{request.query}#{request.body}" end) do
+  def put_header_signature(
+        %Finch.Request{} = request,
+        header_key,
+        secret_key,
+        payload \\ fn request -> "#{request.query}#{request.body}" end
+      ) do
     signature = sign_payload(payload.(request), secret_key)
     add_header(request, header_key, signature)
   end
 
-  def put_query_signature(%Finch.Request{} = request, query_key, secret_key, payload \\ fn request -> "#{request.query}#{request.body}" end) do
+  def put_query_signature(
+        %Finch.Request{} = request,
+        query_key,
+        secret_key,
+        payload \\ fn request -> "#{request.query}#{request.body}" end
+      ) do
     signature = sign_payload(payload.(request), secret_key)
     signature_param = URI.encode_query(%{query_key => signature})
 
