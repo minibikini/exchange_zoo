@@ -51,6 +51,9 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
 
   @doc false
   def copy_new_files(%Exchange{} = exchange, %Model{} = model) do
+    fixture_path = Path.join(["test", "support", "fixtures", exchange.handle])
+    Mix.Generator.create_directory(fixture_path)
+
     files = files_to_be_generated(exchange, model)
     Mix.Zoo.copy_from("priv/templates/zoo.gen.model", [exchange: exchange, model: model], files)
 
