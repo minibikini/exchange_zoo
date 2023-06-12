@@ -11,6 +11,15 @@ defmodule ExchangeZoo.Model do
         |> changeset(data)
         |> apply_action!(:insert)
       end
+
+      def enum_fields() do
+        Enum.filter(__MODULE__.__schema__(:fields), fn field ->
+          case __MODULE__.__schema__(:type, field) do
+            {:parameterized, Ecto.Enum, _} -> true
+            _ -> false
+          end
+        end)
+      end
     end
   end
 
