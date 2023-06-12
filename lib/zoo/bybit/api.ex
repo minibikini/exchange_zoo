@@ -9,4 +9,5 @@ defmodule ExchangeZoo.Bybit.API do
   private :post, "/v5/order/create-batch", Model.OrderResponse, as: :create_batch_order # 404??
   private :post, "/v5/order/cancel-batch", Model.OrderResponse, as: :cancel_batch_order # 404??
   private :post, "/v5/order/cancel-all", Model.OrderResponse, as: :cancel_all_orders
+  private :post, "/v5/position/set-leverage", nil, as: :set_position_leverage
 end
