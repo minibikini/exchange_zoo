@@ -6,7 +6,7 @@ defmodule ExchangeZoo.Binance.Request do
     url = append_query_params(url, params)
 
     Finch.build(method, url)
-    |> Request.perform(mod)
+    |> Request.perform(mod, Error)
   end
 
   def perform_private(url, method, params, mod, opts) do
