@@ -10,8 +10,9 @@ defmodule ExchangeZoo.Binance.FWSTest do
   @rest_uri "https://testnet.binancefuture.com"
   @ws_uri "wss://stream.binancefuture.com/ws"
 
-  @tag :external
   describe "with an active connection" do
+    @describetag :external
+
     setup do
       {:ok, %Binance.Model.ListenKey{listen_key: listen_key}} =
         Binance.FAPI.start_user_data_stream([],
