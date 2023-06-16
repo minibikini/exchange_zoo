@@ -1,7 +1,6 @@
-defmodule ExchangeZoo.BinanceUSTest do
+defmodule ExchangeZoo.BinanceUS.ModelTest do
   use ExUnit.Case, async: true
   import ExchangeZoo.Fixtures
-  alias ExchangeZoo.BinanceUS.WS
 
   describe "BookTicker" do
     alias ExchangeZoo.BinanceUS.Model.BookTicker
@@ -38,7 +37,7 @@ defmodule ExchangeZoo.BinanceUSTest do
 
       assert expected ==
                json_fixture("binance_us/events/book_ticker")
-               |> WS.parse_event()
+               |> BookTickerEvent.from!()
     end
   end
 end

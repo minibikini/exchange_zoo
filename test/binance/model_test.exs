@@ -1,7 +1,6 @@
-defmodule ExchangeZoo.BinanceTest do
+defmodule ExchangeZoo.Binance.ModelTest do
   use ExUnit.Case, async: true
   import ExchangeZoo.Fixtures
-  alias ExchangeZoo.Binance.FWS
 
   describe "ExchangeInfo" do
     alias ExchangeZoo.Binance.Model.ExchangeInfo
@@ -319,7 +318,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/book_ticker")
-               |> FWS.parse_event()
+               |> BookTickerEvent.from!()
     end
   end
 
@@ -360,7 +359,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/contract_info")
-               |> FWS.parse_event()
+               |> ContractInfoEvent.from!()
     end
   end
 
@@ -380,7 +379,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/mark_price_update")
-               |> FWS.parse_event()
+               |> MarkPriceUpdateEvent.from!()
     end
   end
 
@@ -392,7 +391,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/listen_key_expired")
-               |> FWS.parse_event()
+               |> ListenKeyExpiredEvent.from!()
     end
   end
 
@@ -419,7 +418,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/margin_call")
-               |> FWS.parse_event()
+               |> MarginCallEvent.from!()
     end
   end
 
@@ -484,7 +483,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/account_update_order")
-               |> FWS.parse_event()
+               |> AccountUpdateEvent.from!()
     end
   end
 
@@ -531,7 +530,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/order_trade_update")
-               |> FWS.parse_event()
+               |> OrderTradeUpdateEvent.from!()
     end
   end
 
@@ -551,7 +550,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/account_config_update")
-               |> FWS.parse_event()
+               |> AccountConfigUpdateEvent.from!()
     end
   end
 
@@ -574,7 +573,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/strategy_update")
-               |> FWS.parse_event()
+               |> StrategyUpdateEvent.from!()
     end
   end
 
@@ -601,7 +600,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/grid_update")
-               |> FWS.parse_event()
+               |> GridUpdateEvent.from!()
     end
   end
 
@@ -625,7 +624,7 @@ defmodule ExchangeZoo.BinanceTest do
 
       assert expected ==
                json_fixture("binance/events/asset_index_update")
-               |> FWS.parse_event()
+               |> AssetIndexUpdateEvent.from!()
     end
   end
 end

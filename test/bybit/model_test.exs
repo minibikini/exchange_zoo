@@ -1,4 +1,4 @@
-defmodule ExchangeZoo.BybitTest do
+defmodule ExchangeZoo.Bybit.ModelTest do
   use ExUnit.Case, async: true
   import ExchangeZoo.Fixtures
 
