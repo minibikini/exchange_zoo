@@ -44,7 +44,7 @@ defmodule ExchangeZoo.Bybit.PrivateStream do
         {:reply, {:text, message}, state}
 
       :subscribed ->
-        {:noreply, state.opts[:callback_state]}
+        {:noreply, state}
 
       event ->
         callback_state =
