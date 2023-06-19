@@ -13,6 +13,13 @@ defmodule ExchangeZoo.Binance.FWSTest do
   describe "with an active connection" do
     @describetag :external
 
+    defmodule Test do
+      def handle_event(message, state) do
+        send(state.parent, message)
+        {:ok, state}
+      end
+    end
+
     setup do
       {:ok, %Binance.Model.ListenKey{listen_key: listen_key}} =
         Binance.FAPI.start_user_data_stream([],
@@ -37,12 +44,5 @@ defmodule ExchangeZoo.Binance.FWSTest do
       # !assetIndex@arr updates 1/s
       assert_receive {:event, _data}, 30000
     end
-  end
-end
-
-defmodule Test do
-  def handle_event(message, state) do
-    send(state.parent, message)
-    {:ok, state}
   end
 end
