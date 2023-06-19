@@ -74,17 +74,17 @@ defmodule ExchangeZoo.Bybit.PrivateStream do
   def parse_event(%{"op" => "subscribe", "success" => true}), do: :subscribed
 
   def parse_event(%{"topic" => "execution", "data" => data}),
-    do: ExecutionEvent.from!(data)
+    do: Enum.map(data, &ExecutionEvent.from!/1)
 
   def parse_event(%{"topic" => "position", "data" => data}),
-    do: PositionEvent.from!(data)
+    do: Enum.map(data, &PositionEvent.from!/1)
 
   def parse_event(%{"topic" => "order", "data" => data}),
-    do: OrderEvent.from!(data)
+    do: Enum.map(data, &OrderEvent.from!/1)
 
   def parse_event(%{"topic" => "wallet", "data" => data}),
-    do: WalletEvent.from!(data)
+    do: Enum.map(data, &WalletEvent.from!/1)
 
   def parse_event(%{"topic" => "greek", "data" => data}),
-    do: GreekEvent.from!(data)
+    do: Enum.map(data, &GreekEvent.from!/1)
 end
