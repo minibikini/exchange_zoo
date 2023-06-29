@@ -55,6 +55,53 @@ defmodule ExchangeZoo.Bybit.ModelTest do
     end
   end
 
+  describe "PositionList" do
+    alias ExchangeZoo.Bybit.Model.PositionList
+    alias ExchangeZoo.Bybit.Model.PositionList.Position
+
+    test "should parse /v5/position/list" do
+      expected = %PositionList{
+        category: :inverse,
+        next_page_cursor: nil,
+        list: [
+          %Position{
+            position_idx: :both,
+            risk_id: 1,
+            risk_limit_value: Decimal.new("150"),
+            symbol: "BTCUSD",
+            side: :sell,
+            size: Decimal.new("299"),
+            avg_price: Decimal.new("30004.5006751"),
+            position_value: Decimal.new("0.00996518"),
+            trade_mode: :cross,
+            position_status: :normal,
+            auto_add_margin: 1,
+            adl_rank_indicator: 2,
+            leverage: Decimal.new("10"),
+            position_balance: Decimal.new("0.00100189"),
+            mark_price: Decimal.new("26926.00"),
+            liq_price: Decimal.new("999999.00"),
+            bust_price: Decimal.new("999999.00"),
+            position_mm: Decimal.new("0.0000015"),
+            position_im: Decimal.new("0.00009965"),
+            tpsl_mode: :full,
+            take_profit: Decimal.new("0.00"),
+            stop_loss: Decimal.new("0.00"),
+            trailing_stop: Decimal.new("0.00"),
+            unrealised_pnl: Decimal.new("0.00113932"),
+            cum_realised_pnl: Decimal.new("-0.00121275"),
+            created_time: 1676538056258,
+            updated_time: 1684742400015
+          }
+        ]
+      }
+
+      assert expected ==
+        json_fixture("bybit/v5_position_list")
+        |> PositionList.from!()
+    end
+  end
+
   describe "OrderResponse" do
     alias ExchangeZoo.Bybit.Model.OrderResponse
 

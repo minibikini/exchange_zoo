@@ -4,6 +4,7 @@ defmodule ExchangeZoo.Bybit.API do
   alias ExchangeZoo.Bybit.Model
 
   public :get, "/v5/market/instruments-info", Model.InstrumentsInfo
+  private :get, "/v5/position/list", Model.PositionList, as: :get_position_info
   private :get, "/v5/order/realtime", Model.OrderResponse, as: :get_open_orders
   private :post, "/v5/order/create", Model.OrderResponse, as: :create_order
   private :post, "/v5/order/create-batch", Model.OrderResponse, as: :create_batch_order # 404??
