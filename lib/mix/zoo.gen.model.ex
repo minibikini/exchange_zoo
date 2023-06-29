@@ -41,7 +41,7 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
 
   @doc false
   def files_to_be_generated(%Exchange{} = exchange, %Model{} = model) do
-    module_path = Path.join(["lib", "zoo", exchange.handle])
+    module_path = Path.join(["lib", "zoo", exchange.handle, "model"])
     model_file = Macro.underscore(model.name) <> ".ex"
 
     [
