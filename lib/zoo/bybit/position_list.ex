@@ -61,7 +61,7 @@ defmodule ExchangeZoo.Bybit.Model.PositionList.Position do
   end
 
   def changeset(position, attrs \\ %{}) do
-    attrs = prepare_enums(attrs, ~w(position_idx side trade_mode position_status tpsl_mode))
+    attrs = prepare_enums(attrs, enum_fields() |> Enum.map(&to_string/1))
     cast(position, attrs, __MODULE__.__schema__(:fields))
   end
 end

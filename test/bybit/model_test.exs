@@ -102,6 +102,53 @@ defmodule ExchangeZoo.Bybit.ModelTest do
     end
   end
 
+  describe "WalletBalanceList" do
+    alias ExchangeZoo.Bybit.Model.{Coin, WalletBalanceList}
+    alias ExchangeZoo.Bybit.Model.WalletBalanceList.WalletBalance
+
+    test "should parse /v5/position/list" do
+      expected = %WalletBalanceList{
+        list: [
+          %WalletBalance{
+            total_equity: Decimal.new("18070.32797922"),
+            account_im_rate: Decimal.new("0.0101"),
+            total_margin_balance: Decimal.new("18070.32797922"),
+            total_initial_margin: Decimal.new("182.60183684"),
+            account_type: :unified,
+            total_available_balance: Decimal.new("17887.72614237"),
+            account_mm_rate: Decimal.new("0"),
+            total_perp_upl: Decimal.new("-0.11001349"),
+            total_wallet_balance: Decimal.new("18070.43799271"),
+            account_ltv: Decimal.new("0.017"),
+            total_maintenance_margin: Decimal.new("0.38106773"),
+            coin: [
+              %Coin{
+                available_to_borrow: Decimal.new("2.5"),
+                bonus: Decimal.new("0"),
+                accrued_interest: Decimal.new("0"),
+                available_to_withdraw: Decimal.new("0.805994"),
+                total_order_im: Decimal.new("0"),
+                equity: Decimal.new("0.805994"),
+                total_position_mm: Decimal.new("0"),
+                usd_value: Decimal.new("12920.95352538"),
+                unrealised_pnl: Decimal.new("0"),
+                borrow_amount: Decimal.new("0"),
+                total_position_im: Decimal.new("0"),
+                wallet_balance: Decimal.new("0.805994"),
+                cum_realised_pnl: Decimal.new("0"),
+                coin: "BTC"
+              }
+            ]
+          }
+        ]
+      }
+
+      assert expected ==
+        json_fixture("bybit/v5_account_wallet-balance")
+        |> WalletBalanceList.from!()
+    end
+  end
+
   describe "OrderResponse" do
     alias ExchangeZoo.Bybit.Model.OrderResponse
 
@@ -226,8 +273,8 @@ defmodule ExchangeZoo.Bybit.ModelTest do
   end
 
   describe "WalletEvent" do
+    alias ExchangeZoo.Bybit.Model.Coin
     alias ExchangeZoo.Bybit.Model.WalletEvent
-    alias ExchangeZoo.Bybit.Model.WalletEvent.Coin
 
     test "should parse wallet event" do
       expected = %WalletEvent{

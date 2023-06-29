@@ -1,6 +1,24 @@
-defmodule ExchangeZoo.Bybit.Model.WalletEvent do
+defmodule ExchangeZoo.Bybit.Model.WalletBalanceList do
   use ExchangeZoo.Model
+  alias ExchangeZoo.Bybit.Model.WalletBalanceList.WalletBalance
 
+  @primary_key false
+
+  embedded_schema do
+    embeds_many :list, WalletBalance
+  end
+
+  def changeset(wallet_balance_list, attrs \\ %{}) do
+    attrs = underscore_keys(attrs)
+
+    wallet_balance_list
+    |> cast(attrs, __MODULE__.__schema__(:fields) -- [:list])
+    |> cast_embed(:list)
+  end
+end
+
+defmodule ExchangeZoo.Bybit.Model.WalletBalanceList.WalletBalance do
+  use ExchangeZoo.Model
   alias ExchangeZoo.Bybit.Model.Coin
 
   @primary_key false
@@ -23,13 +41,13 @@ defmodule ExchangeZoo.Bybit.Model.WalletEvent do
     embeds_many :coin, Coin
   end
 
-  def changeset(wallet_event, attrs \\ %{}) do
+  def changeset(account, attrs \\ %{}) do
     attrs =
       attrs
       |> underscore_keys()
       |> prepare_enums(enum_fields() |> Enum.map(&to_string/1))
 
-    wallet_event
+    account
     |> cast(attrs, __MODULE__.__schema__(:fields) -- [:coin])
     |> cast_embed(:coin)
   end

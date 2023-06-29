@@ -65,7 +65,7 @@ defmodule ExchangeZoo.Bybit.Model.InstrumentsInfo.Instrument do
   end
 
   def changeset(instrument, attrs \\ %{}) do
-    attrs = prepare_enums(attrs, ~w(contract_type options_type status))
+    attrs = prepare_enums(attrs, enum_fields() |> Enum.map(&to_string/1))
 
     instrument
     |> cast(attrs, __MODULE__.__schema__(:fields) -- [:leverage_filter, :price_filter, :lot_size_filter])
