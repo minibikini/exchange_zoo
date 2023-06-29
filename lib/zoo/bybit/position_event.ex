@@ -22,7 +22,7 @@ defmodule ExchangeZoo.Bybit.Model.PositionEvent do
     field :mark_price, :decimal
     field :leverage, :decimal
     field :position_balance, :decimal
-    field :auto_add_margin, :boolean
+    field :auto_add_margin, :integer
     field :position_mm, :decimal
     field :position_im, :decimal
     field :liq_price, :decimal
