@@ -2,6 +2,9 @@ defmodule ExchangeZoo.API do
   @moduledoc """
   Conveniences for defining exchange REST APIs.
 
+  * Imports ExchangeZoo.API and ExchangeZoo.__MODULE__.API
+  * Sets @base_url and defines macros in example below.
+
   ## Example
 
       defmodule ExchangeZoo.Binance.API do
