@@ -106,7 +106,7 @@ defmodule ExchangeZoo.Bybit.ModelTest do
     alias ExchangeZoo.Bybit.Model.{Coin, WalletBalanceList}
     alias ExchangeZoo.Bybit.Model.WalletBalanceList.WalletBalance
 
-    test "should parse /v5/position/list" do
+    test "should parse /v5/account/walletBalance" do
       expected = %WalletBalanceList{
         list: [
           %WalletBalance{
@@ -146,6 +146,25 @@ defmodule ExchangeZoo.Bybit.ModelTest do
       assert expected ==
         json_fixture("bybit/v5_account_wallet-balance")
         |> WalletBalanceList.from!()
+    end
+  end
+
+  describe "Account" do
+    alias ExchangeZoo.Bybit.Model.Account
+
+    test "should parse /v5/account/info" do
+      expected = %Account{
+        margin_mode: "REGULAR_MARGIN",
+        updated_time: 1681283529000,
+        unified_margin_status: :unified_trade,
+        dcp_status: "OFF",
+        time_window: 10,
+        smp_group: 0
+      }
+
+      assert expected ==
+        json_fixture("bybit/v5_account_info")
+        |> Account.from!()
     end
   end
 
