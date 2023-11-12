@@ -66,7 +66,7 @@ defmodule ExchangeZoo.Binance.ModelTest do
               :take_profit_market,
               :trailing_stop_market
             ],
-            time_in_force: [:gtc, :ioc, :fok, :gtx],
+            time_in_force: [:gtc, :ioc, :fok, :gtx, :gtd],
             liquidation_fee: Decimal.new("0.010000"),
             market_take_bound: Decimal.new("0.30"),
             filters: [

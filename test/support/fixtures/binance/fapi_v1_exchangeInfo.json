@@ -106,7 +106,8 @@
         "GTC",
         "IOC",
         "FOK",
-        "GTX"
+        "GTX",
+        "GTD"
       ],
       "liquidationFee": "0.010000",
       "marketTakeBound": "0.30"

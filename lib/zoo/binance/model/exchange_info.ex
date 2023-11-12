@@ -49,7 +49,7 @@ defmodule ExchangeZoo.Binance.Model.ExchangeInfo.Symbol do
   @contract_types ~w(perpetual current_month next_month current_quarter next_quarter perpetual_delivering)a
   @statuses ~w(pending_trading trading pre_delivering delivering delivered pre_settle settling close)a
   @order_types ~w(limit market stop stop_market take_profit take_profit_market trailing_stop_market)a
-  @time_in_forces ~w(gtc ioc fok gtx)a
+  @time_in_forces ~w(gtc ioc fok gtx gtd)a
 
   embedded_schema do
     field :symbol, :string
