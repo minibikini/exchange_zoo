@@ -5,7 +5,7 @@ defmodule ExchangeZoo.MixProject do
     [
       app: :exchange_zoo,
       version: "0.1.0",
-      elixir: "~> 1.13",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -27,9 +27,8 @@ defmodule ExchangeZoo.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:castore, "~> 0.1.22"},
-      {:finch, "~> 0.14"},
-      {:wind, "~> 0.2.4"},
+      {:finch, "~> 0.16"},
+      {:wind, "~> 0.3.1"},
       # {:wind, path: "/Users/bfolkens/dev/bfolkens-github/wind"},
       {:jason, "~> 1.1"},
       {:ecto, "~> 3.9"},
