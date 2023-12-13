@@ -3,7 +3,7 @@ defmodule ExchangeZoo.Bybit.Model.Account do
 
   @primary_key false
 
-  @unified_margin_statuses [regular: 1, unified_margin: 2, unified_trade: 3]
+  @unified_margin_statuses [regular: 1, unified_margin: 2, unified_trade: 3, uta_pro: 4]
 
   embedded_schema do
     field :dcp_status, :string
