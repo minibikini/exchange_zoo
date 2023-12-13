@@ -16,7 +16,8 @@ defmodule ExchangeZoo.Bybit.Model.PositionList do
   def changeset(position_list, attrs \\ %{}) do
     attrs = underscore_keys(attrs)
 
-    cast(position_list, attrs, __MODULE__.__schema__(:fields) -- [:list])
+    position_list
+    |> cast(attrs, __MODULE__.__schema__(:fields) -- [:list])
     |> cast_embed(:list)
   end
 end

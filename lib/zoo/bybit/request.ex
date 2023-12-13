@@ -47,11 +47,6 @@ defmodule ExchangeZoo.Bybit.Request do
 
   defp decode(%Finch.Response{status: 200} = response, mod, error_mod) do
     case Jason.decode(response.body) do
-      # TODO: there's a retExtInfo that looks like it returns a result code for
-      # each object in a list - should we include that somehow?
-      {:ok, %{"retCode" => 0, "result" => %{"list" => data}}} ->
-        {:ok, Enum.map(data, &Request.model_from_data(&1, mod))}
-
       {:ok, %{"retCode" => 0, "result" => data}} ->
         {:ok, Request.model_from_data(data, mod)}
 

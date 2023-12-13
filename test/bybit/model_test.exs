@@ -55,6 +55,67 @@ defmodule ExchangeZoo.Bybit.ModelTest do
     end
   end
 
+  describe "OrderList" do
+    alias ExchangeZoo.Bybit.Model.OrderList
+    alias ExchangeZoo.Bybit.Model.OrderList.Order
+
+    test "should parse /v5/order/realtime" do
+      expected = %OrderList{
+        category: :linear,
+        next_page_cursor: nil,
+        list: [
+          %Order{
+            order_id: "fd4300ae-7847-404e-b947-b46980a4d140",
+            order_link_id: "test-000005",
+            block_trade_id: nil,
+            symbol: "ETHUSDT",
+            price: Decimal.new("1600.00"),
+            qty: Decimal.new("0.10"),
+            side: :buy,
+            is_leverage: nil,
+            position_idx: :buy,
+            order_status: :new,
+            cancel_type: :unknown,
+            reject_reason: :ec__no_error,
+            avg_price: Decimal.new("0"),
+            leaves_qty: Decimal.new("0.10"),
+            leaves_value: Decimal.new("160"),
+            cum_exec_qty: Decimal.new("0.00"),
+            cum_exec_value: Decimal.new("0"),
+            cum_exec_fee: Decimal.new("0"),
+            time_in_force: :gtc,
+            order_type: :limit,
+            stop_order_type: :unknown,
+            order_iv: nil,
+            trigger_price: Decimal.new("0.00"),
+            take_profit: Decimal.new("2500.00"),
+            stop_loss: Decimal.new("1500.00"),
+            tp_trigger_by: :last_price,
+            sl_trigger_by: :last_price,
+            trigger_direction: :none,
+            trigger_by: :unknown,
+            last_price_on_created: nil,
+            reduce_only: false,
+            close_on_trigger: false,
+            smp_type: :none,
+            smp_group: 0,
+            smp_order_id: nil,
+            tpsl_mode: :full,
+            tp_limit_price: nil,
+            sl_limit_price: nil,
+            place_type: nil,
+            created_time: 1684738540559,
+            updated_time: 1684738540561
+            }
+          ]
+        }
+
+      assert expected ==
+        json_fixture("bybit/v5_order_realtime")
+        |> OrderList.from!()
+    end
+  end
+
   describe "PositionList" do
     alias ExchangeZoo.Bybit.Model.PositionList
     alias ExchangeZoo.Bybit.Model.PositionList.Position
