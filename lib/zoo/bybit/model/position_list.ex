@@ -27,7 +27,7 @@ defmodule ExchangeZoo.Bybit.Model.PositionList.Position do
 
   @primary_key false
 
-  @sides ~w(buy sell)a
+  @sides ~w(buy sell none)a
   @position_statuses ~w(normal liq adl)a
   @tpsl_modes ~w(full)a
 
