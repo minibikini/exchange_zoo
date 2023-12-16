@@ -41,10 +41,10 @@ defmodule Mix.Tasks.Zoo.Gen.Exchange do
   @doc false
   def files_to_be_generated(%Exchange{} = exchange) do
     module_path = Path.join(["lib", "zoo", exchange.handle])
+    # test_path = Path.join(["test", exchange.handle])
 
     [
-      {"request.ex", Path.join([module_path, "request.ex"])},
-      {"test.ex", Path.join(["test", "#{exchange.handle}_test.exs"])}
+      {"request.ex", Path.join([module_path, "request.ex"])}
     ]
   end
 
