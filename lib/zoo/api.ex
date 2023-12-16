@@ -21,13 +21,8 @@ defmodule ExchangeZoo.API do
   @doc false
   defmacro __using__(opts) do
     base_url = Keyword.fetch!(opts, :base_url)
-
     request_module =
-      __CALLER__.module
-      |> Module.split()
-      |> Enum.slice(0, 2)
-      |> Kernel.++(["Request"])
-      |> Module.concat()
+      Keyword.get(opts, :request_module, infer_request_module(__CALLER__.module))
 
     quote do
       import ExchangeZoo.API
@@ -98,4 +93,12 @@ defmodule ExchangeZoo.API do
   defp method_to_prefix(:post), do: "create"
   defp method_to_prefix(:put), do: "update"
   defp method_to_prefix(method), do: method
+
+  defp infer_request_module(module) do
+    module
+    |> Module.split()
+    |> Enum.slice(0, 2)
+    |> Kernel.++(["Request"])
+    |> Module.concat()
+  end
 end
