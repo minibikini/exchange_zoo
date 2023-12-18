@@ -45,7 +45,7 @@ defmodule ExchangeZoo.API do
       public :get, "/v5/instrumentsInfo"
       private :post, "/v1/order", as: :create_order
   """
-  defmacro public(method, path, model, opts \\ []) do
+  defmacro public(method, path, model \\ nil, opts \\ []) do
     fun_name =
       Keyword.get_lazy(opts, :as, fn ->
         to_function_name(method, path)
@@ -66,7 +66,7 @@ defmodule ExchangeZoo.API do
 
       private :post, "/v1/order", as: :create_order
   """
-  defmacro private(method, path, model, opts \\ []) do
+  defmacro private(method, path, model \\ nil, opts \\ []) do
     fun_name = Keyword.get_lazy(opts, :as, fn -> to_function_name(method, path) end)
 
     quote do
