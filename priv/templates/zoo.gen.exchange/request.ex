@@ -9,7 +9,7 @@ defmodule ExchangeZoo.<%= @exchange.name %>.Request do
     |> Request.perform(mod, Error)
   end
 
-  def perform_private(url, method, mod, opts) do
+  def perform_private(url, method, params, mod, opts) do
     # TODO: Implement me
     raise "Not yet implemented"
   end
