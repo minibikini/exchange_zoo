@@ -46,11 +46,13 @@ defmodule Mix.Tasks.Zoo.Gen.Event do
     fixture_path = Path.join(["test", "support", "fixtures", exchange.handle, "events"])
     Mix.Generator.create_directory(fixture_path)
 
-    files = Mix.Tasks.Zoo.Gen.Model.files_to_be_generated(exchange, model)
+    files = files_to_be_generated(exchange, model)
     Mix.Zoo.copy_from("priv/templates/zoo.gen.model", [exchange: exchange, model: model], files)
 
     exchange
   end
+
+  defdelegate files_to_be_generated(exchange, model), to: Mix.Tasks.Zoo.Gen.Model
 
   defp parse_opts(args) do
     {opts, parsed, invalid} = OptionParser.parse(args, switches: @switches)
@@ -89,6 +91,7 @@ defmodule Mix.Tasks.Zoo.Gen.Event do
     module name for the resource followed by any number of attributes:
 
         mix zoo.gen.event Binance Order symbol:string price:decimal quantity:decimal
+        mix zoo.gen.event Binance AccountUpdate --example=example.json
     """)
   end
 end
