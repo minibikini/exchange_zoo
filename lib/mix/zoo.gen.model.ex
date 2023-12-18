@@ -19,6 +19,7 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
 
   @switches [handle: :string]
   @default_opts []
+  @template_path "priv/templates/zoo.gen.model"
 
   use Mix.Task
 
@@ -37,6 +38,24 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
     model = Model.new(model_name, attrs)
 
     copy_new_files(exchange, model)
+    inject_files(exchange, model)
+  end
+
+  @doc false
+  def inject_files(%Exchange{} = exchange, %Model{} = model) do
+    template_file = Path.join([@template_path, "model_test_describe_block.ex.eex"])
+    dest_file = Path.join(["test", exchange.handle, "model_test.exs"])
+
+    Mix.Zoo.inject_from(
+      template_file,
+      dest_file,
+      [
+        exchange: exchange,
+        model: model,
+        endpoint_path: "/v1/example_endpoint",
+        json_fixture_filename: "example_endpoint"
+      ]
+    )
   end
 
   @doc false
@@ -44,8 +63,11 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
     module_path = Path.join(["lib", "zoo", exchange.handle, "model"])
     model_file = Macro.underscore(model.name) <> ".ex"
 
+    test_path = Path.join(["test", exchange.handle])
+
     [
-      {"model.ex", Path.join([module_path, model_file])}
+      {"model.ex", Path.join([module_path, model_file])},
+      {"model_test.exs", Path.join([test_path, "model_test.exs"])}
     ]
   end
 
@@ -55,7 +77,7 @@ defmodule Mix.Tasks.Zoo.Gen.Model do
     Mix.Generator.create_directory(fixture_path)
 
     files = files_to_be_generated(exchange, model)
-    Mix.Zoo.copy_from("priv/templates/zoo.gen.model", [exchange: exchange, model: model], files)
+    Mix.Zoo.copy_from(@template_path, [exchange: exchange, model: model], files)
 
     exchange
   end

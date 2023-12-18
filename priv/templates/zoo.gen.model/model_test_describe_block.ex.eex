@@ -1,0 +1,13 @@
+  describe "<%= @model.name %>" do
+    alias ExchangeZoo.<%= @exchange.name %>.Model.<%= @model.name %>
+
+    test "should parse <%= @endpoint_path %>" do
+      expected = [
+        %<%= @model.name %>{}
+      ]
+
+      assert expected ==
+               json_fixture("<%= String.downcase(@exchange.name) %>/<%= @json_fixture_filename %>")
+               |> Enum.map(&<%= @model.name %>.from!/1)
+    end
+  end
