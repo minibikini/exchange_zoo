@@ -1,0 +1,38 @@
+{
+  "timezone": "CST",
+  "serverTime": 1702757582905,
+  "rateLimits": [],
+  "exchangeFilters": [],
+  "symbols": [
+    {
+      "symbol": "BTCUSDT",
+      "status": "ENABLED",
+      "baseAsset": "BTC",
+      "baseAssetPrecision": 6,
+      "quoteAsset": "USDT",
+      "quotePrecision": 2,
+      "quoteAssetPrecision": 2,
+      "baseCommissionPrecision": 6,
+      "quoteCommissionPrecision": 2,
+      "orderTypes": [
+        "LIMIT",
+        "MARKET",
+        "LIMIT_MAKER"
+      ],
+      "isSpotTradingAllowed": false,
+      "isMarginTradingAllowed": false,
+      "quoteAmountPrecision": "5.000000000000000000",
+      "baseSizePrecision": "0.000001",
+      "permissions": [
+        "SPOT"
+      ],
+      "filters": [],
+      "maxQuoteAmount": "2000000.000000000000000000",
+      "makerCommission": "0",
+      "takerCommission": "0",
+      "quoteAmountPrecisionMarket": "5.000000000000000000",
+      "maxQuoteAmountMarket": "100000.000000000000000000",
+      "fullName": "Bitcoin"
+    }
+  ]
+}
