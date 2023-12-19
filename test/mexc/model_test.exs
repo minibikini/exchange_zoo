@@ -60,7 +60,7 @@ defmodule ExchangeZoo.MEXC.ModelTest do
         %Order{
           order_id: "102015012431820288",
           symbol: "ETH_USDT",
-          position_id: 1394917,
+          position_id: 1_394_917,
           price: Decimal.new("1209.05"),
           vol: Decimal.new("1"),
           leverage: 0,
@@ -79,8 +79,8 @@ defmodule ExchangeZoo.MEXC.ModelTest do
           external_oid: "_m_f95eb99b061d4eef8f64a04e9ac4dad3",
           error_code: :normal,
           used_margin: Decimal.new("0"),
-          create_time: 1609992674000,
-          update_time: 1609992674000,
+          create_time: 1_609_992_674_000,
+          update_time: 1_609_992_674_000,
           stop_loss_price: Decimal.new("0.0"),
           take_profit_price: Decimal.new("0.0")
         }
@@ -195,6 +195,93 @@ defmodule ExchangeZoo.MEXC.ModelTest do
       assert expected ==
                json_fixture("mexc/v1_contract_detail")
                |> Enum.map(&ContractDetail.from!/1)
+    end
+  end
+
+  describe "AssetEvent" do
+    alias ExchangeZoo.MEXC.Model.AssetEvent
+
+    test "should parse asset event" do
+      expected = %AssetEvent{
+        currency: "USDT",
+        available_balance: Decimal.new("0.7514236"),
+        frozen_balance: Decimal.new("0"),
+        position_margin: Decimal.new("0"),
+        cash_balance: Decimal.new("10")
+      }
+
+      assert expected ==
+               json_fixture("mexc/events/asset")
+               |> AssetEvent.from!()
+    end
+  end
+
+  describe "PositionEvent" do
+    alias ExchangeZoo.MEXC.Model.PositionEvent
+
+    test "should parse position event" do
+      expected = %PositionEvent{
+        auto_add_im: false,
+        close_avg_price: Decimal.new("0.731"),
+        close_vol: Decimal.new("1"),
+        frozen_vol: Decimal.new("0"),
+        hold_avg_price: Decimal.new("0.736"),
+        hold_fee: Decimal.new("0"),
+        hold_vol: Decimal.new("0"),
+        im: Decimal.new("0"),
+        leverage: 15,
+        liquidate_price: Decimal.new("0"),
+        oim: Decimal.new("0"),
+        open_avg_price: Decimal.new("0.736"),
+        open_type: :isolated,
+        position_id: 1_397_818,
+        position_type: :long,
+        realised: Decimal.new("-0.0005"),
+        state: :closed,
+        symbol: "CRV_USDT"
+      }
+
+      assert expected ==
+               json_fixture("mexc/events/position")
+               |> PositionEvent.from!()
+    end
+  end
+
+  describe "OrderEvent" do
+    alias ExchangeZoo.MEXC.Model.OrderEvent
+
+    test "should parse order event" do
+      expected = %OrderEvent{
+        category: :limit_order,
+        create_time: 1610005069976,
+        deal_avg_price: Decimal.new("0.731"),
+        deal_vol: Decimal.new("1"),
+        error_code: :normal,
+        external_oid: "_m_95bc2b72d3784bce8f9efecbdef9fe35",
+        fee_currency: "USDT",
+        leverage: 0,
+        maker_fee: Decimal.new("0"),
+        open_type: :isolated,
+        order_id: "102067003631907840",
+        order_margin: Decimal.new("0"),
+        order_type: :market_order,
+        position_id: 1397818,
+        price: Decimal.new("0.707"),
+        profit: Decimal.new("-0.0005"),
+        remain_vol: Decimal.new("0"),
+        side: :close_long,
+        state: :completed,
+        symbol: "CRV_USDT",
+        taker_fee: Decimal.new("0.00004386"),
+        update_time: 1610005069983,
+        used_margin: Decimal.new("0"),
+        version: 2,
+        vol: Decimal.new("1")
+      }
+
+      assert expected ==
+               json_fixture("mexc/events/order")
+               |> OrderEvent.from!()
     end
   end
 end
