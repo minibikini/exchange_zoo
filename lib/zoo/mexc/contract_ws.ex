@@ -13,7 +13,6 @@ defmodule ExchangeZoo.MEXC.ContractWS do
 
   def connect_uri(), do: URI.new!(@base_url)
 
-  # [params, callback_mod]
   def start_link(opts) do
     opts = Keyword.merge([uri: connect_uri()], opts)
     Wind.Client.start_link(__MODULE__, opts)
@@ -46,7 +45,6 @@ defmodule ExchangeZoo.MEXC.ContractWS do
 
     {:ok, callback_state} =
       case parse_event(data) do
-        # TODO: Pass error messages too (we'll need them in the UI)
         :subscribed ->
           {:ok, state.opts[:callback_state]}
 
