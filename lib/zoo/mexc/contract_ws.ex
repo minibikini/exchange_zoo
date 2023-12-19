@@ -3,7 +3,7 @@ defmodule ExchangeZoo.MEXC.ContractWS do
   Source: https://mexcdevelop.github.io/apidocs/contract_v1_en/#websocket-api
   """
 
-  use Wind.Client, ping_timer: 30_000
+  use Wind.Client, ping_timer: 10_000, ping_frame: {:text, ~S[{"method": "ping"}]}
 
   alias ExchangeZoo.MEXC.Model.{AssetEvent, PositionEvent, OrderEvent}
 
@@ -48,6 +48,10 @@ defmodule ExchangeZoo.MEXC.ContractWS do
         :subscribed ->
           {:ok, state.opts[:callback_state]}
 
+        :pong ->
+          IO.puts("pong")
+          {:ok, state.opts[:callback_state]}
+
         {:error, reason} ->
           state.opts[:callback_mod].handle_event({:error, reason}, state.opts[:callback_state])
 
@@ -61,6 +65,13 @@ defmodule ExchangeZoo.MEXC.ContractWS do
   def parse_event(%{"channel" => "rs.login", "data" => "success"}), do: :subscribed
 
   def parse_event(%{"channel" => "rs.error", "data" => reason}), do: {:error, reason}
+
+  def parse_event(%{"channel" => "clientId", "data" => _client_id}), do: :subscribed
+
+  def parse_event(%{"channel" => "pong"}) do
+    Process.send_after(self(), :ping_timer, 10_000)
+    :pong
+  end
 
   def parse_event(%{"channel" => "push.personal.asset", "data" => data}),
     do: AssetEvent.from!(data)
