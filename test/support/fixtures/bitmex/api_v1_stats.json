@@ -1,0 +1,17 @@
+[
+  {
+    "currency": "USDt",
+    "openInterest": 234420000,
+    "openValue": 9357110105520,
+    "rootSymbol": "XBT",
+    "turnover24h": 21325658792000,
+    "volume24h": 534668000
+  },
+  {
+    "openInterest": 0,
+    "openValue": 0,
+    "rootSymbol": "XBT",
+    "turnover24h": 25339700950,
+    "volume24h": 63490000
+  }
+]
