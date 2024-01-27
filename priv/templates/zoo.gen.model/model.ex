@@ -7,8 +7,8 @@ defmodule ExchangeZoo.<%= @exchange.name %>.Model.<%= @model.name %> do
 <%= Mix.Zoo.Model.format_fields_for_schema(@model) %>
   end
 
-  def changeset(order, attrs \\ %{}) do
+  def changeset(record, attrs \\ %{}) do
     attrs = underscore_keys(attrs)
-    cast(order, attrs, __MODULE__.__schema__(:fields))
+    cast(record, attrs, __MODULE__.__schema__(:fields))
   end
 end
