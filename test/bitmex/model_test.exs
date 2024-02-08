@@ -196,6 +196,7 @@ defmodule ExchangeZoo.BitMEX.ModelTest do
                |> Enum.map(&Position.from!/1)
     end
   end
+
   describe "Order" do
     alias ExchangeZoo.BitMEX.Model.Order
 
@@ -236,6 +237,168 @@ defmodule ExchangeZoo.BitMEX.ModelTest do
       assert expected ==
                json_fixture("bitmex/api_v1_orders")
                |> Enum.map(&Order.from!/1)
+    end
+  end
+
+  describe "InstrumentEvent" do
+    alias ExchangeZoo.BitMEX.Model.InstrumentEvent
+
+    test "should parse instrument event" do
+      expected =
+        %InstrumentEvent{
+          symbol: "ADAUSD",
+          open_value: 106_425_852,
+          fair_price: Decimal.new("0.4849"),
+          mark_price: Decimal.new("0.4849"),
+          timestamp: ~U[2024-01-27T17:47:20.749000Z]
+        }
+
+      assert expected ==
+               json_fixture("bitmex/events/instrument_event")
+               |> InstrumentEvent.from!()
+    end
+  end
+
+  describe "FundingEvent" do
+    alias ExchangeZoo.BitMEX.Model.FundingEvent
+
+    test "should parse funding event" do
+      expected =
+        %FundingEvent{
+          symbol: "AXSUSD",
+          funding_rate: Decimal.new("0.0001"),
+          funding_rate_daily: Decimal.new("0.00030000000000000003"),
+          funding_interval: ~U[2000-01-01T08:00:00.000000Z],
+          timestamp: ~U[2024-01-27T12:00:00.000000Z]
+        }
+
+      assert expected ==
+               json_fixture("bitmex/events/funding_event")
+               |> FundingEvent.from!()
+    end
+  end
+
+  describe "ExecutionEvent" do
+    alias ExchangeZoo.BitMEX.Model.ExecutionEvent
+
+    test "should parse execution event" do
+      expected =
+        %ExecutionEvent{
+          exec_id: "0193e879-cb6f-2891-d099-2c4eb40fee21",
+          order_id: "00000000-0000-0000-0000-000000000000",
+          cl_ord_id: nil,
+          cl_ord_link_id: nil,
+          account: 2,
+          symbol: "XBTUSD",
+          side: "Sell",
+          last_qty: 1,
+          last_px: Decimal.new("1134.37"),
+          underlying_last_px: nil,
+          last_mkt: "XBME",
+          last_liquidity_ind: "RemovedLiquidity",
+          simple_order_qty: nil,
+          order_qty: 1,
+          price: Decimal.new("1134.37"),
+          display_qty: nil,
+          stop_px: nil,
+          peg_offset_value: nil,
+          peg_price_type: nil,
+          currency: "USD",
+          settl_currency: "XBt",
+          exec_type: "Trade",
+          ord_type: "Limit",
+          time_in_force: "ImmediateOrCancel",
+          exec_inst: nil,
+          contingency_type: nil,
+          ex_destination: "XBME",
+          ord_status: "Filled",
+          triggered: nil,
+          working_indicator: false,
+          ord_rej_reason: nil,
+          simple_leaves_qty: 0,
+          leaves_qty: 0,
+          simple_cum_qty: Decimal.new("0.001"),
+          cum_qty: 1,
+          avg_px: Decimal.new("1134.37"),
+          commission: Decimal.new("0.00075"),
+          trade_publish_indicator: "DoNotPublishTrade",
+          multi_leg_reporting_type: "SingleSecurity",
+          text: "Liquidation",
+          trd_match_id: "7f4ab7f6-0006-3234-76f4-ae1385aad00f",
+          exec_cost: 88155,
+          exec_comm: 66,
+          home_notional: Decimal.new("-0.00088155"),
+          foreign_notional: 1,
+          transact_time: ~U[2017-04-04T22:07:46.035000Z],
+          timestamp: ~U[2017-04-04T22:07:46.035000Z]
+        }
+
+      assert expected ==
+               json_fixture("bitmex/events/execution_event")
+               |> ExecutionEvent.from!()
+    end
+  end
+
+  describe "MarginEvent" do
+    alias ExchangeZoo.BitMEX.Model.MarginEvent
+
+    test "should parse margin event" do
+      expected =
+        %MarginEvent{
+          account: 413_794,
+          currency: "XBt",
+          risk_limit: 1_000_000_000_000,
+          amount: 1_000_000,
+          prev_realised_pnl: 0,
+          gross_comm: 0,
+          gross_open_cost: 0,
+          gross_open_premium: 0,
+          gross_exec_cost: 0,
+          gross_mark_value: 0,
+          risk_value: 0,
+          init_margin: 0,
+          maint_margin: 0,
+          target_excess_margin: 0,
+          realised_pnl: 0,
+          unrealised_pnl: 0,
+          wallet_balance: 1_000_000,
+          margin_balance: 1_000_000,
+          margin_leverage: Decimal.new("0.0"),
+          margin_used_pcnt: Decimal.new("0.0"),
+          excess_margin: 1_000_000,
+          available_margin: 1_000_000,
+          withdrawable_margin: 1_000_000,
+          timestamp: ~U[2024-01-25T17:39:06.157000Z]
+        }
+
+      assert expected ==
+               json_fixture("bitmex/events/margin_event")
+               |> MarginEvent.from!()
+    end
+  end
+
+  describe "WalletEvent" do
+    alias ExchangeZoo.BitMEX.Model.WalletEvent
+
+    test "should parse wallet event" do
+      expected =
+        %WalletEvent{
+          account: 413_794,
+          currency: "XBt",
+          deposited: 0,
+          withdrawn: 0,
+          transferIn: nil,
+          transferOut: nil,
+          amount: 1_000_000,
+          pendingCredit: nil,
+          pendingDebit: nil,
+          confirmedDebit: nil,
+          timestamp: ~U[2024-01-25 17:39:06.157000Z]
+        }
+
+      assert expected ==
+               json_fixture("bitmex/events/wallet_event")
+               |> WalletEvent.from!()
     end
   end
 end

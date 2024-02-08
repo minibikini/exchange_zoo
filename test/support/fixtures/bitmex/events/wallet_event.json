@@ -1,0 +1,13 @@
+{
+  "account": 413794,
+  "currency": "XBt",
+  "deposited": 0,
+  "withdrawn": 0,
+  "transferIn": 1000000,
+  "transferOut": 0,
+  "amount": 1000000,
+  "pendingCredit": 0,
+  "pendingDebit": 0,
+  "confirmedDebit": 0,
+  "timestamp": "2024-01-25T17:39:06.157Z"
+}
