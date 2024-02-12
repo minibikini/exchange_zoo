@@ -59,7 +59,7 @@ defmodule ExchangeZoo.BitMEX.WS do
   @impl true
   def handle_frame({:text, data}, state) do
     # IO.puts(data)
-    # {:ok, data} = Jason.decode(data)
+    {:ok, data} = Jason.decode(data)
     # dbg(data, limit: :infinity)
 
     case parse_event(data) do
