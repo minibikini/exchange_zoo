@@ -31,6 +31,8 @@ defmodule ExchangeZoo.BitMEX.WS do
 
   @impl true
   def handle_connect(state) do
+    # TODO: Do this only if we have api_key/secret_key? Or should we make a
+    # separate private module?
     {:reply, {:text, authenticate_message(state.opts)}, state}
   end
 
@@ -49,11 +51,8 @@ defmodule ExchangeZoo.BitMEX.WS do
     Jason.encode!(%{op: "authKeyExpires", args: [api_key, expires, signature]})
   end
 
-  defp subscribe_message(_opts) do
-    subscription_topics =
-      ~w(funding instrument margin wallet execution order position)
-
-    Jason.encode!(%{op: "subscribe", args: subscription_topics})
+  defp subscribe_message(opts) do
+    Jason.encode!(%{op: "subscribe", args: opts[:params]})
   end
 
   @impl true
