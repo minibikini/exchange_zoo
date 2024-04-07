@@ -35,7 +35,7 @@ defmodule ExchangeZoo.Binance.Model.OrderTradeUpdateEvent.OrderUpdate do
   @order_sides ~w(buy sell)a
   @order_statuses ~w(new partially_filled filled canceled rejected expired)a
   @position_sides ~w(both long short)a
-  @time_in_forces ~w(gtc ioc fok gtx gtd)a
+  @time_in_forces ~w(gtc ioc fok gtx gtd gte_gtc)a
   @execution_types ~w(new canceled calculated expired trade)a
   @working_types ~w(mark_price contract_price)a
 
