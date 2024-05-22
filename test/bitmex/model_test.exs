@@ -88,6 +88,91 @@ defmodule ExchangeZoo.BitMEX.ModelTest do
     end
   end
 
+  describe "User" do
+    alias ExchangeZoo.BitMEX.Model.User
+
+    test "should parse /v1/user" do
+      expected = %User{
+        id: 0,
+        firstname: "string",
+        lastname: "string",
+        username: "string",
+        account_name: "string",
+        is_user: true,
+        email: "string",
+        date_of_birth: "string",
+        phone: "string",
+        created: ~U[2024-05-22T00:05:38.344000Z],
+        last_updated: ~U[2024-05-22T00:05:38.344000Z],
+        preferences: %User.Preferences{
+          alert_on_liquidations: true,
+          animations_enabled: true,
+          announcements_last_seen: ~U[2024-05-22T00:05:38.344000Z],
+          chat_channel_id: 0,
+          color_theme: "string",
+          currency: "string",
+          debug: true,
+          disable_emails: ["string"],
+          disable_push: ["string"],
+          display_corp_enroll_upsell: true,
+          equivalent_currency: "string",
+          features: ["string"],
+          favourites: ["string"],
+          favourites_assets: ["string"],
+          favourites_ordered: ["string"],
+          favourite_bots: ["string"],
+          has_set_trading_currencies: true,
+          hide_confirm_dialogs: ["string"],
+          hide_connection_modal: true,
+          hide_from_leaderboard: false,
+          hide_name_from_leaderboard: true,
+          hide_pnl_in_guilds: false,
+          hide_roi_in_guilds: false,
+          hide_notifications: ["string"],
+          hide_phone_confirm: false,
+          is_sensitive_info_visible: true,
+          is_wallet_zero_balance_hidden: true,
+          locale: "en-US",
+          locale_set_time: 0,
+          margin_pnl_row: "string",
+          margin_pnl_row_kind: "string",
+          mobile_locale: "string",
+          msgs_seen: ["string"],
+          notifications: %{},
+          options_beta: true,
+          order_book_binning: %{},
+          order_book_type: "string",
+          order_clear_immediate: false,
+          order_controls_plus_minus: true,
+          platform_layout: "string",
+          selected_fiat_currency: "string",
+          show_chart_bottom_toolbar: true,
+          show_locale_numbers: true,
+          sounds: ["string"],
+          spacing_preference: "string",
+          strict_ip_check: false,
+          strict_timeout: true,
+          ticker_group: "string",
+          ticker_pinned: true,
+          trade_layout: "string",
+          user_color: "string"
+        },
+        tfa_enabled: "string",
+        affiliate_id: "string",
+        country: "string",
+        geoip_country: "string",
+        geoip_region: "string",
+        first_trade_timestamp: ~U[2024-05-22T00:05:38.344000Z],
+        first_deposit_timestamp: ~U[2024-05-22T00:05:38.344000Z],
+        typ: "string"
+      }
+
+      assert expected ==
+               json_fixture("bitmex/api_v1_user")
+               |> User.from!()
+    end
+  end
+
   describe "UserMargin" do
     alias ExchangeZoo.BitMEX.Model.UserMargin
 

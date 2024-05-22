@@ -1,0 +1,96 @@
+{
+  "id": 0,
+  "firstname": "string",
+  "lastname": "string",
+  "username": "string",
+  "accountName": "string",
+  "isUser": true,
+  "email": "string",
+  "dateOfBirth": "string",
+  "phone": "string",
+  "created": "2024-05-22T00:05:38.344Z",
+  "lastUpdated": "2024-05-22T00:05:38.344Z",
+  "preferences": {
+    "alertOnLiquidations": true,
+    "animationsEnabled": true,
+    "announcementsLastSeen": "2024-05-22T00:05:38.344Z",
+    "chatChannelID": 0,
+    "colorTheme": "string",
+    "currency": "string",
+    "debug": true,
+    "disableEmails": [
+      "string"
+    ],
+    "disablePush": [
+      "string"
+    ],
+    "displayCorpEnrollUpsell": true,
+    "equivalentCurrency": "string",
+    "features": [
+      "string"
+    ],
+    "favourites": [
+      "string"
+    ],
+    "favouritesAssets": [
+      "string"
+    ],
+    "favouritesOrdered": [
+      "string"
+    ],
+    "favouriteBots": [
+      "string"
+    ],
+    "hasSetTradingCurrencies": true,
+    "hideConfirmDialogs": [
+      "string"
+    ],
+    "hideConnectionModal": true,
+    "hideFromLeaderboard": false,
+    "hideNameFromLeaderboard": true,
+    "hidePnlInGuilds": false,
+    "hideRoiInGuilds": false,
+    "hideNotifications": [
+      "string"
+    ],
+    "hidePhoneConfirm": false,
+    "isSensitiveInfoVisible": true,
+    "isWalletZeroBalanceHidden": true,
+    "locale": "en-US",
+    "localeSetTime": 0,
+    "marginPnlRow": "string",
+    "marginPnlRowKind": "string",
+    "mobileLocale": "string",
+    "msgsSeen": [
+      "string"
+    ],
+    "notifications": {},
+    "optionsBeta": true,
+    "orderBookBinning": {},
+    "orderBookType": "string",
+    "orderClearImmediate": false,
+    "orderControlsPlusMinus": true,
+    "platformLayout": "string",
+    "selectedFiatCurrency": "string",
+    "showChartBottomToolbar": true,
+    "showLocaleNumbers": true,
+    "sounds": [
+      "string"
+    ],
+    "spacingPreference": "string",
+    "strictIPCheck": false,
+    "strictTimeout": true,
+    "tickerGroup": "string",
+    "tickerPinned": true,
+    "tradeLayout": "string",
+    "userColor": "string"
+  },
+  "TFAEnabled": "string",
+  "affiliateID": "string",
+  "country": "string",
+  "geoipCountry": "string",
+  "geoipRegion": "string",
+  "firstTradeTimestamp": "2024-05-22T00:05:38.344Z",
+  "firstDepositTimestamp": "2024-05-22T00:05:38.344Z",
+  "typ": "string"
+}
