@@ -19,7 +19,7 @@ defmodule ExchangeZoo.BitMEX.WS do
 
   require Logger
 
-  @base_url "wss://ws.testnet.bitmex.com/realtime"
+  @base_url "wss://ws.bitmex.com/realtime"
 
   def connect_uri(), do: URI.new!(@base_url)
 

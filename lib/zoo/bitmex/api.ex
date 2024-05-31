@@ -1,5 +1,5 @@
 defmodule ExchangeZoo.BitMEX.API do
-  use ExchangeZoo.API, base_url: "https://testnet.bitmex.com/api/v1"
+  use ExchangeZoo.API, base_url: "https://www.bitmex.com/api/v1"
 
   alias ExchangeZoo.BitMEX.Model
 
