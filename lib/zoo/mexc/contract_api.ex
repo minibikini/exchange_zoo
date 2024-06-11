@@ -11,6 +11,7 @@ defmodule ExchangeZoo.MEXC.ContractAPI do
   private :get, "/private/order/list/open_orders", Model.Order
   private :post, "/private/position/change_leverage", nil, as: :change_leverage
   private :post, "/private/order/submit", nil, as: :create_order
+  private :post, "/private/order/submit_batch", nil, as: :create_batch_order
   private :post, "/private/order/cancel", nil, as: :cancel_order
   private :post, "/private/order/cancel_all", nil, as: :cancel_all_orders
 end
