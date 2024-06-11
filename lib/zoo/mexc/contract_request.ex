@@ -1,5 +1,5 @@
 defmodule ExchangeZoo.MEXC.ContractRequest do
-  alias ExchangeZoo.Request
+  alias ExchangeZoo.{Response, Request}
   alias ExchangeZoo.MEXC.Model.ContractError
 
   def perform_public(url, method, params, mod) do
@@ -47,6 +47,8 @@ defmodule ExchangeZoo.MEXC.ContractRequest do
   end
 
   defp decode(%Finch.Response{status: 200} = response, mod, error_mod) do
+    response = Response.decompress_body(response)
+
     case Jason.decode(response.body) do
       {:ok, %{"success" => true, "code" => 0, "data" => data}} ->
         {:ok, Request.model_from_data(data, mod)}
@@ -63,6 +65,8 @@ defmodule ExchangeZoo.MEXC.ContractRequest do
   end
 
   defp decode(response, _mod, error_mod) do
+    response = Response.decompress_body(response)
+
     case Jason.decode(response.body) do
       {:ok, data} ->
         {:error, response.status, Request.model_from_data(data, error_mod)}
