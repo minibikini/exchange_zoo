@@ -13,5 +13,6 @@ defmodule ExchangeZoo.MEXC.ContractAPI do
   private :post, "/private/order/submit", nil, as: :create_order
   private :post, "/private/order/submit_batch", nil, as: :create_batch_order
   private :post, "/private/order/cancel", nil, as: :cancel_order
+  private :post, "/private/order/cancel_with_external", nil, as: :cancel_orders_with_external
   private :post, "/private/order/cancel_all", nil, as: :cancel_all_orders
 end

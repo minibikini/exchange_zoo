@@ -9,7 +9,7 @@ defmodule ExchangeZoo.MEXC.ContractWS do
 
   require Logger
 
-  @base_url "wss://contract.mexc.com/ws"
+  @base_url "wss://contract.mexc.com/edge"
 
   def connect_uri(), do: URI.new!(@base_url)
 
@@ -34,7 +34,7 @@ defmodule ExchangeZoo.MEXC.ContractWS do
       "signature" => signature
     }
 
-    message = Jason.encode!(%{method: "login", param: params})
+    message = Jason.encode!(%{method: "login", subscribe: false, param: params})
 
     {:reply, {:text, message}, state}
   end
@@ -45,11 +45,16 @@ defmodule ExchangeZoo.MEXC.ContractWS do
 
     {:ok, callback_state} =
       case parse_event(data) do
-        :subscribed ->
+        :logged_in ->
+          Logger.debug("Logged-in")
+          apply_subscription_filter()
+          {:ok, state.opts[:callback_state]}
+
+        :subscribed_personal ->
+          Logger.debug("Subscribed personal channel")
           {:ok, state.opts[:callback_state]}
 
         :pong ->
-          IO.puts("pong")
           {:ok, state.opts[:callback_state]}
 
         {:error, reason} ->
@@ -62,11 +67,23 @@ defmodule ExchangeZoo.MEXC.ContractWS do
     {:noreply, put_in(state[:opts][:callback_state], callback_state)}
   end
 
-  def parse_event(%{"channel" => "rs.login", "data" => "success"}), do: :subscribed
+  defp apply_subscription_filter() do
+    message =
+      Jason.encode!(%{
+        method: "personal.filter",
+        param: %{filters: [%{filter: "asset"}]}
+      })
+
+    Wind.Client.send(self(), {:text, message})
+  end
+
+  def parse_event(%{"channel" => "rs.login", "data" => "success"}), do: :logged_in
 
   def parse_event(%{"channel" => "rs.error", "data" => reason}), do: {:error, reason}
 
-  def parse_event(%{"channel" => "clientId", "data" => _client_id}), do: :subscribed
+  def parse_event(%{"channel" => "rs.personal.filter", "data" => "success"}), do: :subscribed_personal
+
+  # def parse_event(%{"channel" => "clientId", "data" => _client_id}), do: :subscribed
 
   def parse_event(%{"channel" => "pong"}) do
     Process.send_after(self(), :ping_timer, 10_000)

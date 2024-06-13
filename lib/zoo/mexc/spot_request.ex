@@ -1,5 +1,5 @@
 defmodule ExchangeZoo.MEXC.SpotRequest do
-  alias ExchangeZoo.Request
+  alias ExchangeZoo.{Response, Request}
   alias ExchangeZoo.MEXC.Model.SpotError
 
   def perform_public(url, method, params, mod) do
