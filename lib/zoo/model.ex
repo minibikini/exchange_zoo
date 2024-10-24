@@ -22,7 +22,7 @@ defmodule ExchangeZoo.Model do
 
   def is_enum?(schema) do
     case schema do
-      {:parameterized, Ecto.Enum, _} -> true
+      {:parameterized, {Ecto.Enum, _}} -> true
       _ -> false
     end
   end
