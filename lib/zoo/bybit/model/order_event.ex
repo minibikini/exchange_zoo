@@ -5,7 +5,7 @@ defmodule ExchangeZoo.Bybit.Model.OrderEvent do
 
   @categories ~w(spot linear inverse option)a
   @sides ~w(buy sell)a
-  @order_statuses ~w(created new rejected partially_filled partially_filled_canceled filled canceled untriggered triggered deactivated active)a
+  @order_statuses ~w(created new rejected partially_filled partially_filled_canceled filled cancelled untriggered triggered deactivated active)a
   @cancel_types ~w(unknown cancel_by_user cancel_by_reduce_only cancel_by_prepare_liq cancel_all_before_liq cancel_by_prepare_adl cancel_all_before_adl cancel_by_admin cancel_by_tp_sl_ts_clear cancel_by_pz_side_ch cancel_by_smp)a
   @reject_reasons ~w(ec__no_error ec__others ec__unknown_message_type ec__missing_cl_ord_id ec__missing_orig_cl_ord_id ec__cl_ord_id_orig_cl_ord_id_are_the_same ec__duplicated_cl_ord_id ec__orig_cl_ord_id_does_not_exist ec__too_late_to_cancel ec__unknown_order_type ec__unknown_side ec__unknown_time_in_force ec__wrongly_routed ec__market_order_price_is_not_zero ec__limit_order_invalid_price ec__no_enough_qty_to_fill ec__no_immediate_qty_to_fill ec__per_cancel_request ec__market_order_cannot_be_post_only ec__post_only_will_take_liquidity ec__cancel_replace_order ec__invalid_symbol_status)a
   @time_in_forces ~w(gtc ioc fok post_only)a
