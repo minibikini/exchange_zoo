@@ -29,7 +29,7 @@ defmodule ExchangeZoo.Bybit.Model.PositionList.Position do
 
   @sides ~w(buy sell none)a
   @position_statuses ~w(normal liq adl)a
-  @tpsl_modes ~w(full)a
+  @tpsl_modes ~w(unknown full partial)a
 
   embedded_schema do
     field :position_idx, Ecto.Enum, values: [both: 0, buy: 1, sell: 2]

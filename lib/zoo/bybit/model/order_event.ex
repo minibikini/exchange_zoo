@@ -11,7 +11,7 @@ defmodule ExchangeZoo.Bybit.Model.OrderEvent do
   @time_in_forces ~w(gtc ioc fok post_only)a
   @order_types ~w(unknown market limit)a
   @stop_order_types ~w(unknown take_profit stop_loss trailing_stop stop partial_take_profit partial_stop_loss tpsl_order)a
-  @tpsl_modes ~w(full partial)a
+  @tpsl_modes ~w(unknown full partial)a
   @trigger_by ~w(unknown last_price index_price mark_price)a
   @place_types ~w(iv price)a
   @smp_types ~w(none cancel_maker cancel_taker cancel_both)a

@@ -5,7 +5,7 @@ defmodule ExchangeZoo.Bybit.Model.PositionEvent do
 
   @categories ~w(spot linear inverse option)a
   @sides ~w(buy sell)a
-  @tpsl_modes ~w(full)a
+  @tpsl_modes ~w(unknown full partial)a
   @position_statuses ~w(normal liq adl)a
 
   embedded_schema do
