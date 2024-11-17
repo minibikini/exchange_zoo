@@ -11,7 +11,7 @@ defmodule ExchangeZoo.Bybit.PrivateStream do
     ExecutionEvent,
     OrderEvent,
     WalletEvent,
-    GreekEvent
+    GreeksEvent
   }
 
   require Logger
@@ -85,6 +85,6 @@ defmodule ExchangeZoo.Bybit.PrivateStream do
   def parse_event(%{"topic" => "wallet", "data" => data}),
     do: Enum.map(data, &WalletEvent.from!/1)
 
-  def parse_event(%{"topic" => "greek", "data" => data}),
-    do: Enum.map(data, &GreekEvent.from!/1)
+  def parse_event(%{"topic" => "greeks", "data" => data}),
+    do: Enum.map(data, &GreeksEvent.from!/1)
 end

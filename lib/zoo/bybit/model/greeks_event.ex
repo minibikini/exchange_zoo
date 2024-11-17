@@ -1,4 +1,4 @@
-defmodule ExchangeZoo.Bybit.Model.GreekEvent do
+defmodule ExchangeZoo.Bybit.Model.GreeksEvent do
   use ExchangeZoo.Model
 
   @primary_key false

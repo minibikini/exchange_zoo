@@ -475,11 +475,11 @@ defmodule ExchangeZoo.Bybit.ModelTest do
     end
   end
 
-  describe "GreekEvent" do
-    alias ExchangeZoo.Bybit.Model.GreekEvent
+  describe "GreeksEvent" do
+    alias ExchangeZoo.Bybit.Model.GreeksEvent
 
-    test "should parse a greek event" do
-      expected = %GreekEvent{
+    test "should parse a greeks event" do
+      expected = %GreeksEvent{
         base_coin: "ETH",
         total_delta: Decimal.new("0.06999986"),
         total_gamma: Decimal.new("-0.00000001"),
@@ -488,8 +488,8 @@ defmodule ExchangeZoo.Bybit.ModelTest do
       }
 
       assert expected ==
-        json_fixture("bybit/events/greek_event")
-        |> GreekEvent.from!()
+        json_fixture("bybit/events/greeks_event")
+        |> GreeksEvent.from!()
     end
   end
 end
