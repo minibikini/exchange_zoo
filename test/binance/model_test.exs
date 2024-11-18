@@ -627,4 +627,30 @@ defmodule ExchangeZoo.Binance.ModelTest do
                |> AssetIndexUpdateEvent.from!()
     end
   end
+
+  describe "Klines" do
+    alias ExchangeZoo.Binance.Model.Kline
+
+    test "should parse /fapi/v1/klines" do
+      expected = [
+        %Kline{
+          open_time: 1499040000000,
+          open: Decimal.new("0.01634790"),
+          high: Decimal.new("0.80000000"),
+          low: Decimal.new("0.01575800"),
+          close: Decimal.new("0.01577100"),
+          volume: Decimal.new("148976.11427815"),
+          close_time: 1499644799999,
+          quote_asset_volume: Decimal.new("2434.19055334"),
+          trades: 308,
+          taker_buy_base_asset_volume: Decimal.new("1756.87402397"),
+          taker_buy_quote_asset_volume: Decimal.new("28.46694368")
+        }
+      ]
+
+      assert expected ==
+               json_fixture("binance/fapi_v1_klines")
+               |> Enum.map(&Kline.from!/1)
+    end
+  end
 end

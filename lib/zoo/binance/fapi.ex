@@ -9,6 +9,7 @@ defmodule ExchangeZoo.Binance.FAPI do
   end
 
   public :get, "/fapi/v1/assetIndex", Model.AssetIndex
+  public :get, "/fapi/v1/klines", Model.Kline
   private :get, "/fapi/v1/leverageBracket", Model.LeverageBracket
   private :get, "/fapi/v1/ticker/bookTicker", Model.BookTicker, as: :order_book_ticker
   private :get, "/fapi/v2/account", Model.Account
