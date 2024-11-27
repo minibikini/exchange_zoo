@@ -47,7 +47,7 @@ defmodule ExchangeZoo.Bybit.PrivateStream do
         {:noreply, state}
 
       event ->
-        callback_state =
+        {:ok, callback_state} =
           state.opts[:callback_mod].handle_event({:event, event}, state.opts[:callback_state])
 
         {:noreply, put_in(state[:opts][:callback_state], callback_state)}
